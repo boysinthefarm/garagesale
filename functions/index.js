@@ -7,6 +7,8 @@ app.get('/', (req, res) => {
     res.send('<html><body><h1>slack-garage-sale</h1></body></html>');
 });
 
+exports.app = functions.https.onRequest(app);
+
 const webClient = new WebClient(functions.config().slack.token);
 
 exports.slackBot = functions.https.onRequest(async (req, res) => {
@@ -44,5 +46,27 @@ exports.slackBot = functions.https.onRequest(async (req, res) => {
   res.sendStatus(200);
 });
 
-exports.app = functions.https.onRequest(app);
+exports.slackCommand = functions.https.onRequest((req, res) => {
+  /* sample request body:
+    {
+      pi_app_id: "A01JV09J6MT"
+      channel_id: "C01KMTL9UUQ"
+      channel_name: "dev"
+      command: "/garage"
+      is_enterprise_install: "false"
+      response_url: "https://hooks.slack.com/commands/T01JY8V5675/1656868781185/qHkegJ7zRdbcBQyTGVhTLcu3"
+      team_domain: "slackgaragesale"
+      team_id: "T01JY8V5675"
+      text: ""
+      token: "h9d56Htt77MSFNEcFeLMEh9t"
+      trigger_id: "1644238199586.1644301176243.8060fa31ecbd0acd4f700636732fb728"
+      user_id: "U01KMTKK9FA"
+      user_name: "hyunwoo126"
+    }
+   */
+  res.send({
+    response_type: 'in_channel',
+    text: 'command successful',
+  });
+});
 
