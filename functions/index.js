@@ -5,6 +5,8 @@ const express = require('express');
 const app = express();
 const { WebClient } = require('@slack/web-api');
 
+const sellModalKit = require('./block_kits/sell-modal.json');
+
 admin.initializeApp(functions.config().firebase);
 const db = admin.firestore();
 
@@ -20,7 +22,7 @@ exports.slackBot = functions.https.onRequest(async (req, res) => {
   functions.logger.log('--- request body ---', req.body);
   /* sample req.body:
     body: {
-      token: 'h9d56Htt77MSFNEcFeLMEh9t',
+      token: 'xxxxxxxxxxxxxxx',
       team_id: 'T01JY8V5675',
       api_app_id: 'A01JV09J6MT',
       event: {
@@ -64,7 +66,7 @@ exports.slackCommand = functions.https.onRequest(async (req, res) => {
       team_domain: "slackgaragesale"
       team_id: "T01JY8V5675"
       text: ""
-      token: "h9d56Htt77MSFNEcFeLMEh9t"
+      token: "xxxxxxxxxxxxxxx"
       trigger_id: "1644238199586.1644301176243.8060fa31ecbd0acd4f700636732fb728"
       user_id: "U01KMTKK9FA"
       user_name: "hyunwoo126"
@@ -92,37 +94,14 @@ exports.slackCommand = functions.https.onRequest(async (req, res) => {
       method: 'post',
       body: JSON.stringify({
         trigger_id,
-        "view": {
-          "type": "modal",
-          "callback_id": "modal-identifier",
-          "title": {
-            "type": "plain_text",
-            "text": "Just a modal"
-          },
-          "blocks": [{
-            "type": "section",
-            "block_id": "section-identifier",
-            "text": {
-              "type": "mrkdwn",
-              "text": "*Welcome* to ~my~ Block Kit _modal_!"
-            },
-            "accessory": {
-              "type": "button",
-              "text": {
-                "type": "plain_text",
-                "text": "Just a button"
-              },
-              "action_id": "button-identifier"
-            }
-          }]
-        }
+        view: sellModalKit,
       }),
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${functions.config().slack.token}`,
       },
     });
-    const json = await response.json();
+    const json = await resOpenModal.json();
     res.sendStatus(200);
   } else {
     res.send({
@@ -132,3 +111,8 @@ exports.slackCommand = functions.https.onRequest(async (req, res) => {
   }
 });
 
+exports.slackInteractive = functions.https.onRequest(async (req, res) => {
+  const { payload } = req.body;
+  functions.logger.log('--- req.body.payload ---', payload);
+  res.sendStatus(200);
+});
