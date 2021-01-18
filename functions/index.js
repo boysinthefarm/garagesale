@@ -1,7 +1,11 @@
-const functions = require("firebase-functions");
+const functions = require('firebase-functions');
+const admin = require('firebase-admin');
 const express = require('express');
 const app = express();
 const { WebClient } = require('@slack/web-api');
+
+admin.initializeApp(functions.config().firebase);
+const db = admin.firestore();
 
 app.get('/', (req, res) => {
     res.send('<html><body><h1>slack-garage-sale</h1></body></html>');
@@ -46,8 +50,9 @@ exports.slackBot = functions.https.onRequest(async (req, res) => {
   res.sendStatus(200);
 });
 
-exports.slackCommand = functions.https.onRequest((req, res) => {
-  /* sample request body:
+exports.slackCommand = functions.https.onRequest(async (req, res) => {
+  functions.logger.log('--- request body ---', req.body);
+  /* sample req.body:
     {
       pi_app_id: "A01JV09J6MT"
       channel_id: "C01KMTL9UUQ"
@@ -64,9 +69,26 @@ exports.slackCommand = functions.https.onRequest((req, res) => {
       user_name: "hyunwoo126"
     }
    */
-  res.send({
-    response_type: 'in_channel',
-    text: 'command successful',
-  });
+
+  if (req.body.text === 'list') {
+    const postsRef = db.collection('posts');
+    const posts = await postsRef.get(); 
+    let text = '';
+    posts.forEach(doc => {
+      functions.logger.log('doc.id:', doc.data());
+      const { title, price } = doc.data();
+      text += `title: ${title} price: $${price} \n`;
+    });
+
+    res.send({
+      response_type: 'in_channel',
+      text,
+    });
+  } else {
+    res.send({
+      response_type: 'in_channel',
+      text: 'command successful',
+    });
+  }
 });
 
