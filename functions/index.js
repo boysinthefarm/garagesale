@@ -1,3 +1,4 @@
+const fetch = require('node-fetch');
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const express = require('express');
@@ -70,6 +71,8 @@ exports.slackCommand = functions.https.onRequest(async (req, res) => {
     }
    */
 
+  const { trigger_id } = req.body;
+
   if (req.body.text === 'list') {
     const postsRef = db.collection('posts');
     const posts = await postsRef.get(); 
@@ -84,6 +87,43 @@ exports.slackCommand = functions.https.onRequest(async (req, res) => {
       response_type: 'in_channel',
       text,
     });
+  } else if (req.body.text === 'sell') {
+    const resOpenModal = await fetch('https://slack.com/api/views.open', {
+      method: 'post',
+      body: JSON.stringify({
+        trigger_id,
+        "view": {
+          "type": "modal",
+          "callback_id": "modal-identifier",
+          "title": {
+            "type": "plain_text",
+            "text": "Just a modal"
+          },
+          "blocks": [{
+            "type": "section",
+            "block_id": "section-identifier",
+            "text": {
+              "type": "mrkdwn",
+              "text": "*Welcome* to ~my~ Block Kit _modal_!"
+            },
+            "accessory": {
+              "type": "button",
+              "text": {
+                "type": "plain_text",
+                "text": "Just a button"
+              },
+              "action_id": "button-identifier"
+            }
+          }]
+        }
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${functions.config().slack.token}`,
+      },
+    });
+    const json = await response.json();
+    res.sendStatus(200);
   } else {
     res.send({
       response_type: 'in_channel',
