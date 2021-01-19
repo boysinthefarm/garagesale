@@ -30,7 +30,7 @@ module.exports = ({ db, functions }) => {
       let text = 'Available Items:';
       posts.forEach(doc => {
         functions.logger.log('doc.id:', doc.data());
-        const { title, price } = doc.data();
+        const { title, price, seller, description } = doc.data();
         text += `${title} ($${price}) sold by ${seller} \n ${description} \n \n`;
       });
 
