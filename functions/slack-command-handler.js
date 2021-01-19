@@ -27,11 +27,11 @@ module.exports = ({ db, functions }) => {
     if (req.body.text === 'list') {
       const postsRef = db.collection('posts');
       const posts = await postsRef.get(); 
-      let text = '';
+      let text = 'Available Items:';
       posts.forEach(doc => {
         functions.logger.log('doc.id:', doc.data());
         const { title, price } = doc.data();
-        text += `title: ${title} price: $${price} \n`;
+        text += `${title} ($${price}) sold by ${seller} \n ${description} \n \n`;
       });
 
       res.send({
