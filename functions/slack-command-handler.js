@@ -27,17 +27,39 @@ module.exports = ({ db, functions }) => {
     if (req.body.text === 'list') {
       const postsRef = db.collection('posts');
       const posts = await postsRef.get(); 
-      let text = 'Available Items:';
+
+      let json_block = {};
+      let blocks = [];
+      let divider = {"type" : "divider"}
+
       posts.forEach(doc => {
         functions.logger.log('doc.id:', doc.data());
-        const { title, price, seller, description } = doc.data();
-        text += `${title} ($${price}) sold by ${seller} \n ${description} \n \n`;
+        const { title, price, seller, description, date_posted, status } = doc.data();
+        // create a json block for each posting
+        let current_post =
+        {
+          "type" : "section",
+          "text" : {
+            "type": "mrkdwn",
+            "text" : `${seller} listed *${title}* for $${price} on ${date_posted} \n :star: ${description}`
+          },
+          "accessory" : {
+            "type" : "image",
+            "image_url": "https://specials-images.forbesimg.com/imageserve/1211718389/960x0.jpg",
+            "alt_text": ${title}
+          }
+        }
+        // add each posting's block to the blocks array
+        blocks.push(current_post);
+        blocks.push(divider);
       });
 
+      let json_block = {"blocks" : blocks}
       res.send({
         response_type: 'in_channel',
-        text,
+        text : json_block,
       });
+
     } else if (req.body.text === 'sell') {
       const resOpenModal = await fetch('https://slack.com/api/views.open', {
         method: 'post',
