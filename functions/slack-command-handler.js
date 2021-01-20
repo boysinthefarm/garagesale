@@ -56,7 +56,7 @@ module.exports = ({ db, functions }) => {
       let jsonBlock = {"blocks" : blocks};
       res.send({
         response_type: 'in_channel',
-        text : jsonBlock,
+        text : res.json(jsonBlock)
       });
 
     } else if (req.body.text === 'sell') {
