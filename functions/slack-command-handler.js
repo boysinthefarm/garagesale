@@ -28,7 +28,6 @@ module.exports = ({ db, functions }) => {
       const postsRef = db.collection('posts');
       const posts = await postsRef.get(); 
 
-      let json_block = {};
       let blocks = [];
       let divider = {"type" : "divider"}
 
@@ -54,10 +53,10 @@ module.exports = ({ db, functions }) => {
         blocks.push(divider);
       });
 
-      let json_block = {"blocks" : blocks}
+      let jsonBlock = {"blocks" : blocks};
       res.send({
         response_type: 'in_channel',
-        text : json_block,
+        text : jsonBlock,
       });
 
     } else if (req.body.text === 'sell') {
