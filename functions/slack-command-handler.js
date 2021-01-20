@@ -46,7 +46,7 @@ module.exports = ({ db, functions }) => {
           "accessory" : {
             "type" : "image",
             "image_url": "https://specials-images.forbesimg.com/imageserve/1211718389/960x0.jpg",
-            "alt_text": ${title}
+            "alt_text": `${title}`
           }
         }
         // add each posting's block to the blocks array
