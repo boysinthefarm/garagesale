@@ -2,11 +2,13 @@ module.exports = ({ functions, db }) => {
   return async (req, res) => {
     const { payload } = req.body;
     functions.logger.log('--- req.body.payload ---', payload);
-    const formData = Object.values(payload.values).reduce((accum, current) => {
+    const formData = Object.values(payload.view.state.values).reduce((accum, current) => {
       return Object.assign(accum, current);
     }, {});
 
     await db.collection('posts').add({
+      seller: payload.user.id,
+      team: payload.user.team_id,
       price: formData.price.value,
       title: formData.title.value,
       description: formData.description.value,
