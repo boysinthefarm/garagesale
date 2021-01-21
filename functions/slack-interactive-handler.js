@@ -1,4 +1,4 @@
-module.exports = ({ functions, db }) => {
+module.exports = ({ functions, db, admin }) => {
   return async (req, res) => {
     const payload = JSON.parse(req.body.payload);
     functions.logger.log('--- req.body.payload ---', payload);
@@ -7,6 +7,7 @@ module.exports = ({ functions, db }) => {
     }, {});
 
     await db.collection('posts').add({
+      date_posted: admin.firestore.Timestamp.now(),
       seller: payload.user.id,
       team: payload.user.team_id,
       price: formData.price.value,
