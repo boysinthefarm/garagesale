@@ -44,7 +44,7 @@ module.exports = ({ db, functions }) => {
           },
           "accessory" : {
             "type" : "image",
-            "image_url": "https://specials-images.forbesimg.com/imageserve/1211718389/960x0.jpg",
+            "image_url": `${image}`,
             "alt_text": `${title}`
           }
         }
