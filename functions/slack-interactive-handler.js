@@ -1,6 +1,6 @@
 module.exports = ({ functions, db }) => {
   return async (req, res) => {
-    const { payload } = req.body;
+    const payload = JSON.parse(req.body.payload);
     functions.logger.log('--- req.body.payload ---', payload);
     const formData = Object.values(payload.view.state.values).reduce((accum, current) => {
       return Object.assign(accum, current);
