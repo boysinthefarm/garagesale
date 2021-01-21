@@ -33,7 +33,7 @@ module.exports = ({ db, functions }) => {
 
       posts.forEach(doc => {
         functions.logger.log('doc.id:', doc.data());
-        const { title, price, seller, description, date_posted, status } = doc.data();
+        const { title, price, seller, description, date_posted, status, image } = doc.data();
         // create a json block for each posting
         let current_post =
         {
