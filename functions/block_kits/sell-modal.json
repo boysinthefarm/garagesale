@@ -23,7 +23,7 @@
               "type": "input",
               "element": {
                         "type": "plain_text_input",
-                                "action_id": "plain_text_input-action"
+                                "action_id": "title"
                                       
               },
               "label": {
@@ -38,7 +38,7 @@
               "type": "input",
               "element": {
                         "type": "plain_text_input",
-                                "action_id": "plain_text_input-action"
+                                "action_id": "price"
                                       
               },
               "label": {
@@ -54,7 +54,7 @@
               "element": {
                         "type": "plain_text_input",
                                 "multiline": true,
-                                        "action_id": "plain_text_input-action"
+                                        "action_id": "description"
                                               
               },
               "label": {

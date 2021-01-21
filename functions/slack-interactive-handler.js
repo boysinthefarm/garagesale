@@ -1,4 +1,4 @@
-module.exports = ({ functions }) => {
+module.exports = ({ functions, db }) => {
   return async (req, res) => {
     const { payload } = req.body;
     functions.logger.log('--- req.body.payload ---', payload);
