@@ -48,8 +48,28 @@ module.exports = ({ db, functions }) => {
             "alt_text": `${title}`
           }
         }
+
+        let buy_button = 
+        {
+          "type": "actions",
+          "elements": [
+            {
+              "type": "button",
+              "text": {
+                "type": "plain_text",
+                "text": "Buy & Message Seller",
+                "emoji": true
+              },
+              "style": "primary",
+              "value": "button_clicked",
+              // must be unique - need a way to address this
+              "action_id": "actionId-0"
+            }
+          ]
+        }
         // add each posting's block to the blocks array
         blocks.push(current_post);
+        blocks.push(buy_button);
         blocks.push(divider);
       });
 
