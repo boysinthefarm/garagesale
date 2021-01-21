@@ -53,10 +53,10 @@ module.exports = ({ db, functions }) => {
         blocks.push(divider);
       });
 
-      let jsonBlock = {"blocks" : blocks};
+      // let jsonBlock = {"blocks" : blocks};
       res.send({
         "response_type": "in_channel",
-        "text" : res.json(jsonBlock)
+        "blocks" : blocks
       });
 
     } else if (req.body.text === 'sell') {
