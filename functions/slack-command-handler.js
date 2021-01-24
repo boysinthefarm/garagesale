@@ -35,7 +35,7 @@ module.exports = ({ db, functions }) => {
         functions.logger.log('doc.id:', doc.data());
         const { title, price, seller, description, date_posted, status, image } = doc.data();
 
-        const userInfo = await fetch('https://slack.com/api/users.info', {
+        const userInfo = fetch('https://slack.com/api/users.info', {
           method: 'get',
           body: JSON.stringify({
             user: ${seller},
