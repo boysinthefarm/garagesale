@@ -74,13 +74,13 @@ module.exports = ({ functions, webClient, webClientUser }) => {
     const makeImagePublicPromises = [];
     const { files } = req.body.event;
     if (files) {
-      images = getImageFiles(files).forEach((img) => {
+      images = getImageFiles(files).forEach((image) => {
         if (!image.public_url_shared) {
           makeImagePublicPromises.push(webClientUser.files.sharedPublicURL({ file: image.id }));
         }
         blocks.push({
           type: 'image',
-          image_url: img.permalink_public,
+          image_url: image.permalink_public,
           alt_text: 'item for sale',
         });
       });
