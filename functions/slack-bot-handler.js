@@ -11,7 +11,7 @@ const getImageFiles = (files) => {
 const getImagePublicLink = (image) => {
   // this is sort of a hack. This method is not found in API docs.
   const parts = image.permalink_public.split('-');
-  const pub_secret = parts[parts.length =1];
+  const pub_secret = parts[parts.length - 1];
 
   return `${image.url_private}?pub_secret=${pub_secret}`;
 };
@@ -99,6 +99,8 @@ module.exports = ({ functions, webClient, webClientUser }) => {
           alt_text: 'item for sale',
         });
       });
+
+      functions.logger.log('---- blocks ----', blocks);
     }
 
     await Promise.all(makeImagePublicPromises);
