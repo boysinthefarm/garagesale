@@ -86,7 +86,7 @@ module.exports = ({ functions, webClient }) => {
     await webClient.chat.postMessage({
       channel: req.body.event.channel,
       text: `A message from Garage Sale!! ${Date.now()}`,
-      blocks,
+      blocks: JSON.stringify(blocks),
     });
 
     res.sendStatus(200);
