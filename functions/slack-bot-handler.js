@@ -71,7 +71,7 @@ module.exports = ({ functions, webClient }) => {
       }
     */
     const blocks = [];
-    const { files } = body.event;
+    const { files } = req.body.event;
     if (files) {
       images = getImageFiles(files).forEach((img) => {
         blocks.append({
