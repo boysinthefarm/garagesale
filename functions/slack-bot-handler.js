@@ -8,7 +8,7 @@ const getImageFiles = (files) => {
   }, []);
 };
 
-module.exports = ({ functions, webClient }) => {
+module.exports = ({ functions, webClient, webClientUser }) => {
   return async (req, res) => {
     functions.logger.log('--- request body ---', req.body);
     /* sample req.body:
@@ -71,22 +71,27 @@ module.exports = ({ functions, webClient }) => {
       }
     */
     const blocks = [];
+    const makeImagePublicPromises = [];
     const { files } = req.body.event;
     if (files) {
       images = getImageFiles(files).forEach((img) => {
+        if (!image.public_url_shared) {
+          makeImagePublicPromises.push(webClientUser.files.sharedPublicURL({ file: image.id }));
+        }
         blocks.push({
           type: 'image',
-          image_url: img.url_private,
+          image_url: img.permalink_public,
           alt_text: 'item for sale',
         });
       });
     }
 
+    await Promise.all(makeImagePublicPromises);
 
     await webClient.chat.postMessage({
       channel: req.body.event.channel,
       text: `A message from Garage Sale!! ${Date.now()}`,
-      blocks: JSON.stringify(blocks),
+      blocks,
     });
 
     res.sendStatus(200);

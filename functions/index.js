@@ -12,14 +12,15 @@ const slackInteractiveHandlerFactory = require('./slack-interactive-handler');
 admin.initializeApp(functions.config().firebase);
 const db = admin.firestore();
 
-const webClient = new WebClient(functions.config().slack.oauth_token);
+const webClient = new WebClient(functions.config().slack.token);
+const webClientUser = new WebClient(functions.config().slack.user_token);
 
 app.get('/', (req, res) => {
     res.send('<html><body><h1>slack-garage-sale</h1></body></html>');
 });
 exports.app = functions.https.onRequest(app);
 
-exports.slackBot = functions.https.onRequest(slackBotHandlerFactory({ functions, webClient }));
+exports.slackBot = functions.https.onRequest(slackBotHandlerFactory({ functions, webClient, webClientUser }));
 
 exports.slackCommand = functions.https.onRequest(slackCommandHandlerFactory({ db, functions }));
 
