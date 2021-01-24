@@ -82,9 +82,8 @@ module.exports = ({ functions, webClient, webClientUser }) => {
                 if (error.message === 'already_public') {
                   return;
                 }
-              });
+              })
           ); 
-
         }
         blocks.push({
           type: 'image',
