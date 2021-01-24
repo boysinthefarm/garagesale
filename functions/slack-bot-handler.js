@@ -93,11 +93,25 @@ module.exports = ({ functions, webClient, webClientUser }) => {
               })
           ); 
         }
+        const imageUrl = getImagePublicLink(image);
         blocks.push({
           type: 'image',
-          image_url: getImagePublicLink(image),
+          image_url: imageUrl,
           alt_text: 'item for sale',
         });
+        blocks.push({
+          type: 'actions',
+          elements: [{
+            type: 'button',
+            text: {
+              type: 'plain_text',
+              text: 'Sell This Item!',
+              emoji: true,
+            },
+            value: imageUrl,
+            action_id: 'sell_this_item',
+          }],
+        })
       });
 
       functions.logger.log('---- blocks ----', blocks);

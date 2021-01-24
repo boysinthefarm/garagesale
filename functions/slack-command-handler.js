@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
-const sellModalKit = require('./block_kits/sell-modal.json');
+const triggerSellModal = require('./trigger-sell-modal');
+
 
 module.exports = ({ db, functions }) => {
   return async function(req, res) {
@@ -90,17 +91,7 @@ module.exports = ({ db, functions }) => {
       });
 
     } else if (req.body.text === 'sell') {
-      const resOpenModal = await fetch('https://slack.com/api/views.open', {
-        method: 'post',
-        body: JSON.stringify({
-          trigger_id,
-          view: sellModalKit,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${functions.config().slack.token}`,
-        },
-      });
+      const resOpenModal = await triggerSellModal();
       const json = await resOpenModal.json();
       res.sendStatus(200);
     } else {
