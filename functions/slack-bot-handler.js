@@ -74,7 +74,7 @@ module.exports = ({ functions, webClient }) => {
     const { files } = req.body.event;
     if (files) {
       images = getImageFiles(files).forEach((img) => {
-        blocks.append({
+        blocks.push({
           type: 'image',
           image_url: img.permalink_public,
           alt_text: 'item for sale',
