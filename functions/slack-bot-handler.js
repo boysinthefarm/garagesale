@@ -76,7 +76,7 @@ module.exports = ({ functions, webClient }) => {
       images = getImageFiles(files).forEach((img) => {
         blocks.push({
           type: 'image',
-          image_url: img.permalink,
+          image_url: img.url_private,
           alt_text: 'item for sale',
         });
       });
