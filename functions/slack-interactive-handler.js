@@ -14,6 +14,11 @@ const blockActionsHandler = (payload) => {
   });
 };
 
+// given a modal submission payload, return the image url
+const getImageUrl = (payload) => {
+  return payload.view.blocks.find(block => block.image_url).image_url;
+};
+
 module.exports = ({ functions, db, admin }) => {
   return async (req, res) => {
     const payload = JSON.parse(req.body.payload);
@@ -34,6 +39,7 @@ module.exports = ({ functions, db, admin }) => {
         price: formData.price.value,
         title: formData.title.value,
         description: formData.description.value,
+        image: getImageUrl(payload),
       });
       res.json({
         response_action: 'clear',
