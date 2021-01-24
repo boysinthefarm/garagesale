@@ -34,13 +34,25 @@ module.exports = ({ db, functions }) => {
       posts.forEach(doc => {
         functions.logger.log('doc.id:', doc.data());
         const { title, price, seller, description, date_posted, status, image } = doc.data();
+
+        const userInfo = await fetch('https://slack.com/api/users.info', {
+          method: 'get',
+          body: JSON.stringify({
+            user: ${seller},
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${functions.config().slack.token}`,
+          },
+        });
+
         // create a json block for each posting
         let current_post =
         {
           "type" : "section",
           "text" : {
             "type": "mrkdwn",
-            "text" : `${seller} listed *${title}* for $${price} on ${date_posted} \n :star: ${description}`
+            "text" : `${userInfo.name} listed *${title}* for $${price} on ${date_posted} \n :star: ${description}`
           },
           "accessory" : {
             "type" : "image",
