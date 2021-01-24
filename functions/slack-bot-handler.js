@@ -76,7 +76,15 @@ module.exports = ({ functions, webClient, webClientUser }) => {
     if (files) {
       images = getImageFiles(files).forEach((image) => {
         if (!image.public_url_shared) {
-          makeImagePublicPromises.push(webClientUser.files.sharedPublicURL({ file: image.id }));
+          makeImagePublicPromises.push(
+            webClientUser.files.sharedPublicURL({ file: image.id })
+              .catch((error) => {
+                if (error.message === 'already_public') {
+                  return;
+                }
+              });
+          ); 
+
         }
         blocks.push({
           type: 'image',
