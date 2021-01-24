@@ -38,7 +38,7 @@ module.exports = ({ db, functions }) => {
         const userInfo = fetch('https://slack.com/api/users.info', {
           method: 'get',
           body: JSON.stringify({
-            user: ${seller},
+            user: `${seller}`,
           }),
           headers: {
             'Content-Type': 'application/json',
