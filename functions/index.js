@@ -12,7 +12,7 @@ const slackInteractiveHandlerFactory = require('./slack-interactive-handler');
 admin.initializeApp(functions.config().firebase);
 const db = admin.firestore();
 
-const webClient = new WebClient(functions.config().slack.token);
+const webClient = new WebClient(functions.config().slack.oauth_token);
 
 app.get('/', (req, res) => {
     res.send('<html><body><h1>slack-garage-sale</h1></body></html>');
