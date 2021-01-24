@@ -1,7 +1,5 @@
 const fetch = require('node-fetch');
 const functions = require('firebase-functions');
-const sellModalKit = require('./block_kits/sell-modal.json');
-
 
 const makeModal = ({ imageUrl }) => {
   return {
