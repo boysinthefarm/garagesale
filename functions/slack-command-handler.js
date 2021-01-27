@@ -32,7 +32,7 @@ module.exports = ({ db, functions }) => {
       let blocks = [];
       let divider = {"type" : "divider"}
 
-      posts.forEach(doc => {
+      posts.forEach(async (doc) => {
         functions.logger.log('doc.id:', doc.data());
         const { title, price, seller, description, date_posted, status, image } = doc.data();
 
