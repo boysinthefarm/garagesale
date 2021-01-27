@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 const triggerSellModal = require('./trigger-sell-modal');
-
+const mylistHandler = require('./mylist-handler');
 
 module.exports = ({ db, functions }) => {
   return async function(req, res) {
@@ -96,6 +96,8 @@ module.exports = ({ db, functions }) => {
       const resOpenModal = await triggerSellModal();
       const json = await resOpenModal.json();
       res.sendStatus(200);
+    } else if (req.body.text === 'mylist') {
+      mylistHandler(req, res);
     } else {
       res.send({
         response_type: 'in_channel',
