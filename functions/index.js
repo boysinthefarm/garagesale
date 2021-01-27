@@ -22,7 +22,7 @@ exports.app = functions.https.onRequest(app);
 
 exports.slackBot = functions.https.onRequest(slackBotHandlerFactory({ functions, webClient, webClientUser }));
 
-exports.slackCommand = functions.https.onRequest(slackCommandHandlerFactory({ db, functions }));
+exports.slackCommand = functions.https.onRequest(slackCommandHandlerFactory({ db, functions, webClient }));
 
 exports.slackInteractive = functions.https.onRequest(slackInteractiveHandlerFactory({ functions, db, admin }));
 

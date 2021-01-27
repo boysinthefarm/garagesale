@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const triggerSellModal = require('./trigger-sell-modal');
 const mylistHandler = require('./mylist-handler');
 
-module.exports = ({ db, functions }) => {
+module.exports = ({ db, functions, webClient }) => {
   return async function(req, res) {
     functions.logger.log('--- request body ---', req.body);
     /* sample req.body:
@@ -32,64 +32,66 @@ module.exports = ({ db, functions }) => {
       let blocks = [];
       let divider = {"type" : "divider"}
 
-      posts.forEach(async (doc) => {
-        functions.logger.log('doc.id:', doc.data());
-        const { title, price, seller, description, date_posted, status, image } = doc.data();
+      functions.logger.log('posts', posts);
 
-        const userInfo = await fetch('https://slack.com/api/users.info', {
-          method: 'get',
-          user: `${seller}`,
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: `Bearer ${functions.config().slack.token}`,
-          },
-        });
-        const userInfoJson = await userInfo.json();
-        functions.logger.log('user information:', userInfoJson);
+      const userInfoPromises = [];
 
-        // create a json block for each posting
-        let current_post =
-        {
-          "type" : "section",
-          "text" : {
-            "type": "mrkdwn",
-            "text" : `${userInfoJson.name} listed *${title}* for $${price} on ${date_posted.toDate()} \n :star: ${description}`
-          },
-          "accessory" : {
-            "type" : "image",
-            "image_url": `${image}`,
-            "alt_text": `${title}`
-          }
-        }
+      posts.forEach(doc => {
+        userInfoPromises.push(new Promise(async (resolve) => {
+          functions.logger.log('doc.id:', doc.id);
+          const { title, price, seller, description, date_posted, status, image } = doc.data();
 
-        let buy_button = 
-        {
-          "type": "actions",
-          "elements": [
-            {
-              "type": "button",
-              "text": {
-                "type": "plain_text",
-                "text": "Buy & Message Seller",
-                "emoji": true
-              },
-              "style": "primary",
-              "value": "button_clicked",
-              // must be unique - need a way to address this
-              "action_id": "actionId-0"
+          const userInfo = await webClient.users.info({ user: seller });
+
+          // create a json block for each posting
+          let current_post =
+          {
+            "type" : "section",
+            "text" : {
+              "type": "mrkdwn",
+              "text" : `${userInfo.user.profile.display_name} listed *${title}* for $${price} on ${date_posted.toDate()} \n :star: ${description}`
+            },
+            "accessory" : {
+              "type" : "image",
+              "image_url": image,
+              "alt_text": title,
             }
-          ]
-        }
-        // add each posting's block to the blocks array
-        blocks.push(current_post);
-        blocks.push(buy_button);
-        blocks.push(divider);
+          }
+
+          let buy_button = 
+          {
+            "type": "actions",
+            "elements": [
+              {
+                "type": "button",
+                "text": {
+                  "type": "plain_text",
+                  "text": "Buy & Message Seller",
+                  "emoji": true
+                },
+                "style": "primary",
+                "value": "button_clicked",
+                // must be unique - need a way to address this
+                "action_id": "actionId-0"
+              }
+            ]
+          }
+          // add each posting's block to the blocks array
+          blocks.push(current_post);
+          blocks.push(buy_button);
+          blocks.push(divider);
+          resolve();
+        }));
       });
 
-      // let jsonBlock = {"blocks" : blocks};
+      functions.logger.log('promises:', userInfoPromises);
+      await Promise.all(userInfoPromises);
+
+      functions.logger.log('blocks:', blocks);
+
       res.send({
         "response_type": "in_channel",
-        "blocks" : blocks
+        blocks,
       });
 
     } else if (req.body.text === 'sell') {
