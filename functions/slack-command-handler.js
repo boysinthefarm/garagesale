@@ -44,7 +44,7 @@ module.exports = ({ db, functions }) => {
             Authorization: `Bearer ${functions.config().slack.token}`,
           },
         });
-        functions.logger('user information:', userInfo);
+        functions.logger.log('user information:', userInfo);
 
         // create a json block for each posting
         let current_post =
