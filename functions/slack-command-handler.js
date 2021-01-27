@@ -44,7 +44,8 @@ module.exports = ({ db, functions }) => {
             Authorization: `Bearer ${functions.config().slack.token}`,
           },
         });
-        functions.logger.log('user information:', userInfo.json());
+        const userInfoJson = await userInfo.json();
+        functions.logger.log('user information:', userInfoJson);
 
         // create a json block for each posting
         let current_post =
@@ -52,7 +53,7 @@ module.exports = ({ db, functions }) => {
           "type" : "section",
           "text" : {
             "type": "mrkdwn",
-            "text" : `${userInfo.json().name} listed *${title}* for $${price} on ${date_posted.toDate()} \n :star: ${description}`
+            "text" : `${userInfoJson.name} listed *${title}* for $${price} on ${date_posted.toDate()} \n :star: ${description}`
           },
           "accessory" : {
             "type" : "image",
