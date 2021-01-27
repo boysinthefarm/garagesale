@@ -113,15 +113,13 @@ module.exports = ({ functions, webClient, webClientUser }) => {
           }],
         })
       });
-
-      functions.logger.log('---- blocks ----', blocks);
     }
 
     await Promise.all(makeImagePublicPromises);
 
-    await webClient.chat.postMessage({
+    await webClient.chat.postEphemeral({
       channel: req.body.event.channel,
-      text: `A message from Garage Sale!! ${Date.now()}`,
+      user: req.body.event.user,
       blocks,
     });
 
