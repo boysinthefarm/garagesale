@@ -84,10 +84,7 @@ module.exports = ({ db, functions, webClient }) => {
         }));
       });
 
-      functions.logger.log('promises:', userInfoPromises);
       await Promise.all(userInfoPromises);
-
-      functions.logger.log('blocks:', blocks);
 
       res.send({
         "response_type": "in_channel",
