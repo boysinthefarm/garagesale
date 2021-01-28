@@ -9,6 +9,7 @@ const webClientBot = new WebClient(functions.config().slack.token);
 const webClientUser = new WebClient(functions.config().slack.user_token);
 
 module.exports = {
+  admin,
   logger: functions.logger,
   db,
   webClientBot,

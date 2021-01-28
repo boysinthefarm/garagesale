@@ -5,12 +5,12 @@ const express = require('express');
 const app = express();
 const { WebClient } = require('@slack/web-api');
 
+const { db } = require('./utils');
+
 const slackBotHandlerFactory = require('./slack-bot-handler');
 const slackCommandHandlerFactory = require('./slack-command-handler');
 const slackInteractiveHandlerFactory = require('./slack-interactive-handler');
 
-admin.initializeApp(functions.config().firebase);
-const db = admin.firestore();
 
 const webClient = new WebClient(functions.config().slack.token);
 const webClientUser = new WebClient(functions.config().slack.user_token);
@@ -24,5 +24,5 @@ exports.slackBot = functions.https.onRequest(slackBotHandlerFactory({ functions,
 
 exports.slackCommand = functions.https.onRequest(slackCommandHandlerFactory({ db, functions, webClient }));
 
-exports.slackInteractive = functions.https.onRequest(slackInteractiveHandlerFactory({ functions, db, admin }));
+exports.slackInteractive = functions.https.onRequest(slackInteractiveHandlerFactory({ functions, db }));
 

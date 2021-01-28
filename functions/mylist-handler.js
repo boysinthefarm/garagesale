@@ -1,12 +1,13 @@
 const { db, webClientBot } = require('./utils');
-const getPostBlock = require('./block-kits');
+const { getPostBlock } = require('./block-kits');
 
 module.exports = async (req, res) => {
+  const userId = req.body.user_id;
   // these two requests should be parallel
-  const userInfo = await webClientBot.users.info({ user: req.body.user_id });
-  const posts = await db.collection('posts').where('seller', '==', user).get();
+  const userInfo = await webClientBot.users.info({ user: userId });
+  const posts = await db.collection('posts').where('seller', '==', userId).get();
 
-  const blocks = [];
+  let blocks = [];
   posts.forEach(doc => {
     blocks = blocks.concat(getPostBlock({
       ...doc.data(),

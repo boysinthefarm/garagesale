@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 const triggerSellModal = require('./trigger-sell-modal');
 const mylistHandler = require('./mylist-handler');
-const getPostBlock = require('./block-kits');
+const { getPostBlock } = require('./block-kits');
 
 module.exports = ({ db, functions, webClient }) => {
   return async function(req, res) {

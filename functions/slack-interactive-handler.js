@@ -1,4 +1,5 @@
 const triggerSellModal = require('./trigger-sell-modal');
+const { admin } = require('./utils');
 
 const sellThisItemHandler = (trigger_id, action) => {
   triggerSellModal(trigger_id, {
@@ -19,7 +20,7 @@ const getImageUrl = (payload) => {
   return payload.view.blocks.find(block => block.image_url).image_url;
 };
 
-module.exports = ({ functions, db, admin }) => {
+module.exports = ({ functions, db }) => {
   return async (req, res) => {
     const payload = JSON.parse(req.body.payload);
     functions.logger.log('--- req.body---', req.body);
