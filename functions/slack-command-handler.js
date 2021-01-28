@@ -1,6 +1,7 @@
 const fetch = require('node-fetch');
 const triggerSellModal = require('./trigger-sell-modal');
 const mylistHandler = require('./mylist-handler');
+const getPostBlock = require('./block-kits');
 
 module.exports = ({ db, functions, webClient }) => {
   return async function(req, res) {
@@ -43,43 +44,15 @@ module.exports = ({ db, functions, webClient }) => {
 
           const userInfo = await webClient.users.info({ user: seller });
 
-          // create a json block for each posting
-          let current_post =
-          {
-            "type" : "section",
-            "text" : {
-              "type": "mrkdwn",
-              "text" : `${userInfo.user.profile.display_name} listed *${title}* for $${price} on ${date_posted.toDate()} \n :star: ${description}`
-            },
-            "accessory" : {
-              "type" : "image",
-              "image_url": image,
-              "alt_text": title,
-            }
-          }
+          blocks = blocks.concat(getPostBlock({
+            display_name: userInfo.user.profile.display_name,
+            title,
+            description,
+            price,
+            date_posted,
+            image,
+          }));
 
-          let buy_button = 
-          {
-            "type": "actions",
-            "elements": [
-              {
-                "type": "button",
-                "text": {
-                  "type": "plain_text",
-                  "text": "Buy & Message Seller",
-                  "emoji": true
-                },
-                "style": "primary",
-                "value": "button_clicked",
-                // must be unique - need a way to address this
-                "action_id": "actionId-0"
-              }
-            ]
-          }
-          // add each posting's block to the blocks array
-          blocks.push(current_post);
-          blocks.push(buy_button);
-          blocks.push(divider);
           resolve();
         }));
       });
