@@ -9,10 +9,11 @@ module.exports = async (req, res) => {
 
   let blocks = [];
   posts.forEach(doc => {
+    const buttons = myPostActionButtons(doc);
     blocks = blocks.concat(getPostBlock({
       ...doc.data(),
       display_name: userInfo.user.profile.display_name,
-    }, [myPostActionButtons(doc)]));
+    }, buttons ? [buttons] : undefined));
   });
 
   res.send({
