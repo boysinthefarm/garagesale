@@ -12,7 +12,7 @@ module.exports = async (req, res) => {
     blocks = blocks.concat(getPostBlock({
       ...doc.data(),
       display_name: userInfo.user.profile.display_name,
-    }, [myPostActionButtons({ postId: doc.id })]));
+    }, [myPostActionButtons(doc)]));
   });
 
   res.send({

@@ -16,22 +16,26 @@ let buyButton = {
     }
   ]
 };
-const myPostActionButtons = ({ postId }) => {
+const myPostActionButtons = (doc) => {
+  const elements = [];
+
+  if (!doc.data().sold) {
+    elements.push({
+      "type": "button",
+      "text": {
+        "type": "plain_text",
+        "text": "Mark as Sold :tada:",
+        "emoji": true
+      },
+      "style": "danger",
+      "value": doc.id,
+      "action_id": "mark_as_sold"
+    });
+  }
+
   return {
-    type: "actions",
-    elements: [
-      {
-        "type": "button",
-        "text": {
-          "type": "plain_text",
-          "text": "Mark as Sold :tada:",
-          "emoji": true
-        },
-        "style": "danger",
-        "value": postId,
-        "action_id": "mark_as_sold"
-      }
-    ]
+    type: 'actions',
+    elements,
   };
 };
 
