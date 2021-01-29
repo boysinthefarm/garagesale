@@ -16,7 +16,7 @@ let buyButton = {
     }
   ]
 };
-const myPostActionButtons = () => {
+const myPostActionButtons = ({ postId }) => {
   return {
     type: "actions",
     elements: [
@@ -24,12 +24,12 @@ const myPostActionButtons = () => {
         "type": "button",
         "text": {
           "type": "plain_text",
-          "text": "Mark as SOLD",
+          "text": "Mark as Sold :tada:",
           "emoji": true
         },
         "style": "danger",
-        "value": "button_clicked",
-        "action_id": "actionId-0"
+        "value": postId,
+        "action_id": "mark_as_sold"
       }
     ]
   };

@@ -1,5 +1,5 @@
 const triggerSellModal = require('./trigger-sell-modal');
-const { admin } = require('./utils');
+const { admin, db } = require('./utils');
 
 const sellThisItemHandler = (trigger_id, action) => {
   triggerSellModal(trigger_id, {
@@ -7,10 +7,17 @@ const sellThisItemHandler = (trigger_id, action) => {
   });
 };
 
+const markAsSold = async (action) => {
+  await db.collection('posts').doc(action.value).update({ sold: true });
+};
+
 const blockActionsHandler = (payload) => {
   payload.actions.forEach((action) => {
-    if (action.action_id === 'sell_this_item') {
+    const { action_id } = action;
+    if (action_id === 'sell_this_item') {
       sellThisItemHandler(payload.trigger_id, action);
+    } else if (action_id === 'mark_as_sold') {
+      markAsSold(action);
     }
   });
 };
