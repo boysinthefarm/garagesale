@@ -1,5 +1,5 @@
 const { db, webClientBot } = require('./utils');
-const { getPostBlock } = require('./block-kits');
+const { getPostBlock, myPostActionButtons } = require('./block-kits');
 
 module.exports = async (req, res) => {
   const userId = req.body.user_id;
@@ -12,7 +12,7 @@ module.exports = async (req, res) => {
     blocks = blocks.concat(getPostBlock({
       ...doc.data(),
       display_name: userInfo.user.profile.display_name,
-    }));
+    }, [myPostActionButtons()]));
   });
 
   res.send({
