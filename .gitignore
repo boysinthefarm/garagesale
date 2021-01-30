@@ -102,3 +102,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# local firebase functions env variable to run firebase emulators:start
+.runtimeconfig.json
