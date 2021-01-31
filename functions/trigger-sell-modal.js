@@ -3,6 +3,7 @@ const functions = require('firebase-functions');
 
 const makeModal = ({ imageUrl }) => {
   return {
+    callback_id: 'sell_modal',
     "type": "modal",
     "title": {
       "type": "plain_text",

@@ -2,10 +2,11 @@ const fetch = require('node-fetch');
 const triggerSellModal = require('./trigger-sell-modal');
 const mylistHandler = require('./mylist-handler');
 const { getPostBlock, buyButton } = require('./block-kits');
+const { logger, db, webClientBot } = require('./utils');
 
-module.exports = ({ db, functions, webClient }) => {
+module.exports = () => {
   return async function(req, res) {
-    functions.logger.log('--- request body ---', req.body);
+    logger.log('--- request body ---', req.body);
     /* sample req.body:
       {
         pi_app_id: "A01JV09J6MT"
@@ -33,16 +34,16 @@ module.exports = ({ db, functions, webClient }) => {
       let blocks = [];
       let divider = {"type" : "divider"}
 
-      functions.logger.log('posts', posts);
+      logger.log('posts', posts);
 
       const userInfoPromises = [];
 
       posts.forEach(doc => {
         userInfoPromises.push(new Promise(async (resolve) => {
-          functions.logger.log('doc.id:', doc.id);
+          logger.log('doc.id:', doc.id);
           const { title, price, seller, description, date_posted, status, image } = doc.data();
 
-          const userInfo = await webClient.users.info({ user: seller });
+          const userInfo = await webClientBot.users.info({ user: seller });
 
           blocks = blocks.concat(getPostBlock({
             display_name: userInfo.user.profile.display_name,
