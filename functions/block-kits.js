@@ -46,8 +46,9 @@ const getPostBlock = ({
   price,
   date_posted,
   image,
+  sold,
 }, appendable = []) => {
-  let currentPost = {
+  let currentPost = [{
     "type" : "section",
     "text" : {
       "type": "mrkdwn",
@@ -58,10 +59,20 @@ const getPostBlock = ({
       "image_url": image,
       "alt_text": title,
     }
-  };
+  }];
+
+  if (sold) {
+    currentPost.push({
+      type: 'context',
+      elements: [{
+          type: 'mrkdwn',
+          text: '*Sold* :lollipop:',
+        }],
+    });
+  }
 
   return [
-    currentPost,
+    ...currentPost,
     ...appendable,
     divider,
   ];
