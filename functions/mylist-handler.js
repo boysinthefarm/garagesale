@@ -1,8 +1,7 @@
 const { db, webClientBot } = require('./utils');
 const { getPostBlock, myPostActionButtons } = require('./block-kits');
 
-module.exports = async (req, res) => {
-  const userId = req.body.user_id;
+const getMylistBlocks = async (userId) => {
   // these two requests should be parallel
   const userInfo = await webClientBot.users.info({ user: userId });
   const posts = await db.collection('posts').where('seller', '==', userId).get();
@@ -16,9 +15,20 @@ module.exports = async (req, res) => {
     }, buttons ? [buttons] : undefined));
   });
 
+  return blocks;
+};
+
+const mylistHandler = async (req, res) => {
+  const userId = req.body.user_id;
+  const blocks = await getMylistBlocks(userId);
   res.send({
     response_type: 'in_channel',
     blocks,
   });
+};
+
+module.exports = {
+  getMylistBlocks,
+  mylistHandler,
 };
 

@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 const triggerSellModal = require('./trigger-sell-modal');
-const mylistHandler = require('./mylist-handler');
+const { mylistHandler } = require('./mylist-handler');
 const { getPostBlock, buyButton } = require('./block-kits');
 const { logger, db, webClientBot } = require('./utils');
 
