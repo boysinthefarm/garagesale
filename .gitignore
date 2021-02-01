@@ -105,3 +105,6 @@ dist
 
 # local firebase functions env variable to run firebase emulators:start
 .runtimeconfig.json
+
+# firebase admin SDK private key
+service-account-key.json
