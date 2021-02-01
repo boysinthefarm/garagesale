@@ -1,10 +1,13 @@
 const { db, webClientBot } = require('./utils');
 const { getPostBlock, myPostActionButtons } = require('./block-kits');
+const { PostsApi } = require('./db-api');
 
-const getMylistBlocks = async (userId) => {
+const getMylistBlocks = async ({ userId, teamId }) => {
   // these two requests should be parallel
   const userInfo = await webClientBot.users.info({ user: userId });
-  const posts = await db.collection('posts').where('seller', '==', userId).get();
+
+  const postsApi = new PostsApi({ userId,  teamId });
+  const posts = await postsApi.get();
 
   let blocks = [];
   posts.forEach(doc => {
@@ -19,8 +22,8 @@ const getMylistBlocks = async (userId) => {
 };
 
 const mylistHandler = async (req, res) => {
-  const userId = req.body.user_id;
-  const blocks = await getMylistBlocks(userId);
+  const { user_id: userId, team_id: teamId  } = req.body;
+  const blocks = await getMylistBlocks({ userId, teamId });
   res.send({
     response_type: 'in_channel',
     blocks,

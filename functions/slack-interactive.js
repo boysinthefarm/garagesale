@@ -4,6 +4,7 @@ const { createMessageAdapter } = require('@slack/interactive-messages');
 const { db, admin, logger } = require('./utils');
 const triggerSellModal = require('./trigger-sell-modal');
 const { getMylistBlocks } = require('./mylist-handler');
+const { PostsApi } = require('./db-api');
 
 const slackInteractions = createMessageAdapter(functions.config().slack.signing_secret);
 
@@ -15,10 +16,13 @@ slackInteractions.action({ actionId: 'sell_this_item' }, (payload, respond) => {
 });
 
 slackInteractions.action({ actionId: 'mark_as_sold' }, async (payload, respond) => {
-  logger.log('--- mark_as_sold ---');
+  logger.log('--- mark_as_sold ---', payload);
+  const { user } = payload;
   const postId = payload.actions[0].value;
-  await db.collection('posts').doc(postId).update({ sold: true });
-  const blocks = await getMylistBlocks(payload.user.id);
+
+  const postsApi = new PostsApi({ userId: user.id, teamId: user.team_id });
+  await postsApi.doc(postId).update({ sold: true });
+  const blocks = await getMylistBlocks({ userId: user.id, teamId: user.team_id });
 
   respond({
     replace_original: true,
