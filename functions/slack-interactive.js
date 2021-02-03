@@ -30,6 +30,10 @@ slackInteractions.action({ actionId: 'mark_as_sold' }, async (payload, respond) 
   });
 });
 
+slackInteractions.action({ actionId: 'buy_message_seller' }, (payload, respond) => {
+  logger.log('--- buy_message_seller ---', payload);
+});
+
 slackInteractions.viewSubmission('sell_modal', async (payload) => {
   logger.log('--- sell_modal ---', payload);
  
