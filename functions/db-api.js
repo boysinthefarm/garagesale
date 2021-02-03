@@ -34,7 +34,7 @@ class PostsApi {
   }
 
   where(...params) {
-    this.currentQuery = currentQuery.where(...params);
+    this.currentQuery = this.currentQuery.where(...params);
     return this;
   }
 
