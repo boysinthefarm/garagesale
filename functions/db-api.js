@@ -41,7 +41,7 @@ class PostsApi {
   }
 
   doc(postId) {
-    // .doc is not for query.
+    // .doc is not for query
     this.currentRef = this.collection.doc(postId);
     return this;
   }
