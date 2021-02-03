@@ -48,11 +48,14 @@ const getPostBlock = ({
   image,
   sold,
 }, appendable = []) => {
+  const ts = date_posted.seconds;
+  const tsText = `<!date^${ts}^{date_short_pretty}|${ts}>`;
+
   let currentPost = [{
-    "type" : "section",
-    "text" : {
-      "type": "mrkdwn",
-      "text" : `${display_name} listed *${title}* for $${price} on ${date_posted.toDate()} \n :star: ${description}`
+    type: 'section',
+    text: {
+      type: 'mrkdwn',
+      text: `${display_name} listed *${title}* for $${price} on ${tsText} \n :star: ${description}`,
     },
     "accessory" : {
       "type" : "image",
