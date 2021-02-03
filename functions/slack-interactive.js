@@ -1,7 +1,7 @@
 const express = require('express');
 const functions = require('firebase-functions');
 const { createMessageAdapter } = require('@slack/interactive-messages');
-const { db, admin, logger } = require('./utils');
+const { db, admin, logger, webClientBot } = require('./utils');
 const triggerSellModal = require('./trigger-sell-modal');
 const { getMylistBlocks } = require('./mylist-handler');
 const { PostsApi } = require('./db-api');
@@ -32,6 +32,15 @@ slackInteractions.action({ actionId: 'mark_as_sold' }, async (payload, respond) 
 
 slackInteractions.action({ actionId: 'buy_message_seller' }, (payload, respond) => {
   logger.log('--- buy_message_seller ---', payload);
+
+  const { user: { id: userId, team_id: teamId } } = paylod;
+  const postsApi = new PostsApi({ userId, teamId });
+  const post = await postApi.doc(payload.actions[0].value);
+
+  webClientBot.chat.postMessage({
+    channel: post.data().seller,
+    text: 'user wants to buy your item!',
+  });
 });
 
 slackInteractions.viewSubmission('sell_modal', async (payload) => {
