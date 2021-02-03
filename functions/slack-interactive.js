@@ -30,7 +30,7 @@ slackInteractions.action({ actionId: 'mark_as_sold' }, async (payload, respond) 
   });
 });
 
-slackInteractions.action({ actionId: 'buy_message_seller' }, (payload, respond) => {
+slackInteractions.action({ actionId: 'buy_message_seller' }, async (payload, respond) => {
   logger.log('--- buy_message_seller ---', payload);
 
   const { user: { id: userId, team_id: teamId } } = paylod;
