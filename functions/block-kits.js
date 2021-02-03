@@ -1,3 +1,5 @@
+const commaNumber = require('comma-number');
+
 let divider = { type: 'divider' };
 let buyButton = {
   "type": "actions",
@@ -55,7 +57,7 @@ const getPostBlock = ({
     type: 'section',
     text: {
       type: 'mrkdwn',
-      text: `${display_name} listed *${title}* for $${price} on ${tsText} \n :star: ${description}`,
+      text: `${display_name} listed *${title}* for $${commaNumber(price)} on ${tsText} \n :star: ${description}`,
     },
     "accessory" : {
       "type" : "image",
