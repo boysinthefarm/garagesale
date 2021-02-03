@@ -1,8 +1,9 @@
 const fetch = require('node-fetch');
 const triggerSellModal = require('./trigger-sell-modal');
 const { mylistHandler } = require('./mylist-handler');
-const { getPostBlock, buyButton } = require('./block-kits');
-const { logger, db, webClientBot } = require('./utils');
+const { getPostBlock, listPostActionButtons } = require('./block-kits');
+const { logger, webClientBot } = require('./utils');
+const { PostsApi } = require('./db-api');
 
 module.exports = () => {
   return async function(req, res) {
@@ -25,33 +26,32 @@ module.exports = () => {
       }
      */
 
-    const { trigger_id } = req.body;
+    const { trigger_id, user_id, team_id } = req.body;
 
     if (req.body.text === 'list') {
-      const postsRef = db.collection('posts');
-      const posts = await postsRef.get(); 
+      const postsApi = new PostsApi({
+        userId: user_id,
+        teamId: team_id,
+      });
+      const posts = await postsApi.where('sold', '==', false).get();
 
       let blocks = [];
-      logger.log('posts', posts);
-
       const userInfoPromises = [];
 
       posts.forEach(doc => {
         userInfoPromises.push(new Promise(async (resolve) => {
-          logger.log('doc.id:', doc.id);
-          const { title, price, seller, description, date_posted, status, image } = doc.data();
+          const { title, price, seller, description, date_posted, sold, image } = doc.data();
 
           const userInfo = await webClientBot.users.info({ user: seller });
-          if (status === false) {
-            blocks = blocks.concat(getPostBlock({
-              display_name: userInfo.user.profile.display_name,
-              title,
-              description,
-              price,
-              date_posted,
-              image,
-            }, [buyButton]));
-          };
+          blocks = blocks.concat(getPostBlock({
+            display_name: userInfo.user.profile.display_name,
+            title,
+            description,
+            price,
+            date_posted,
+            image,
+            sold,
+          }, [listPostActionButtons(doc)]));
 
           resolve();
         }));

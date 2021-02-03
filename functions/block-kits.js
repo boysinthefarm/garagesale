@@ -1,23 +1,26 @@
 const commaNumber = require('comma-number');
 
 let divider = { type: 'divider' };
-let buyButton = {
-  "type": "actions",
-  "elements": [
-    {
-      "type": "button",
-      "text": {
-        "type": "plain_text",
-        "text": "Buy & Message Seller",
-        "emoji": true
-      },
-      "style": "primary",
-      "value": "button_clicked",
-      // must be unique - need a way to address this
-      "action_id": "actionId-0"
-    }
-  ]
+
+const listPostActionButtons = (doc) => {
+  return {
+    "type": "actions",
+    "elements": [
+      {
+        "type": "button",
+        "text": {
+          "type": "plain_text",
+          "text": "Buy & Message Seller",
+          "emoji": true
+        },
+        "style": "primary",
+        "value": doc.id,
+        "action_id": 'buy_message_seller',
+      }
+    ]
+  };
 };
+
 const myPostActionButtons = (doc) => {
   const elements = [];
 
@@ -85,7 +88,7 @@ const getPostBlock = ({
 
 module.exports = {
   getPostBlock,
-  buyButton,
+  listPostActionButtons,
   myPostActionButtons,
 };
 
