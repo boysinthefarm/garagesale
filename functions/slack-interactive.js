@@ -35,7 +35,7 @@ slackInteractions.action({ actionId: 'buy_message_seller' }, async (payload, res
 
   const { user: { id: userId, team_id: teamId } } = paylod;
   const postsApi = new PostsApi({ userId, teamId });
-  const post = await postApi.doc(payload.actions[0].value);
+  const post = await postApi.doc(payload.actions[0].value).get();
 
   webClientBot.chat.postMessage({
     channel: post.data().seller,
