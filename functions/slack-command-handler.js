@@ -32,8 +32,6 @@ module.exports = () => {
       const posts = await postsRef.get(); 
 
       let blocks = [];
-      let divider = {"type" : "divider"}
-
       logger.log('posts', posts);
 
       const userInfoPromises = [];
