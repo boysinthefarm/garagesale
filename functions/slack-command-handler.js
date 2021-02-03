@@ -44,15 +44,16 @@ module.exports = () => {
           const { title, price, seller, description, date_posted, status, image } = doc.data();
 
           const userInfo = await webClientBot.users.info({ user: seller });
-
-          blocks = blocks.concat(getPostBlock({
-            display_name: userInfo.user.profile.display_name,
-            title,
-            description,
-            price,
-            date_posted,
-            image,
-          }, [buyButton]));
+          if (status === false) {
+            blocks = blocks.concat(getPostBlock({
+              display_name: userInfo.user.profile.display_name,
+              title,
+              description,
+              price,
+              date_posted,
+              image,
+            }, [buyButton]));
+          };
 
           resolve();
         }));
