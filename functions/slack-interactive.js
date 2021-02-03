@@ -50,6 +50,7 @@ slackInteractions.viewSubmission('sell_modal', async (payload) => {
     title: formData.title.value,
     description: formData.description.value,
     image: getImageUrl(payload),
+    sold: false,
   });
 });
 
