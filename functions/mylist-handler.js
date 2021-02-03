@@ -7,7 +7,7 @@ const getMylistBlocks = async ({ userId, teamId }) => {
   const userInfo = await webClientBot.users.info({ user: userId });
 
   const postsApi = new PostsApi({ userId,  teamId });
-  const posts = await postsApi.get();
+  const posts = await postsApi.where('seller', '==', userId).get();
 
   let blocks = [];
   posts.forEach(doc => {

@@ -27,9 +27,8 @@ class PostsApi {
   reset() {
     this.currentDocRef = null;
 
-    // by default, every query will filter by user and team
+    // by default, every query will filter by team
     this.currentQuery = this.collection
-      .where('seller', '==', this.userId)
       .where('team', '==', this.teamId);
     return this;
   }
@@ -52,8 +51,8 @@ class PostsApi {
     const doc = await this.currentDocRef.get();
     const { seller, team } = doc.data();
 
+    // can only be modified by the seller himself
     if (seller !== this.userId || team !== this.teamId) {
-      // not authorized to modify this doc
       throw new UnauthorizedError('Not authorized to modify post');
     }
 
