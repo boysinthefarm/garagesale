@@ -25,30 +25,29 @@ class PostsApi {
   }
 
   reset() {
-    this.currentDocRef = null;
-
     // by default, every query will filter by team
-    this.currentQuery = this.collection
+    this.currentRef = this.collection
       .where('team', '==', this.teamId);
     return this;
   }
 
   where(...params) {
-    this.currentQuery = this.currentQuery.where(...params);
+    this.currentRef = this.currentRef.where(...params);
     return this;
   }
 
   get() {
-    return this.currentQuery.get();
+    return this.currentRef.get();
   }
 
   doc(postId) {
-    this.currentDocRef = this.collection.doc(postId);
+    // .doc is not for query.
+    this.currentRef = this.collection.doc(postId);
     return this;
   }
 
   async update(param) {
-    const doc = await this.currentDocRef.get();
+    const doc = await this.currentRef.get();
     const { seller, team } = doc.data();
 
     // can only be modified by the seller himself
@@ -56,7 +55,7 @@ class PostsApi {
       throw new UnauthorizedError('Not authorized to modify post');
     }
 
-    return this.currentDocRef.update(param);
+    return this.currentRef.update(param);
   }
 }
 

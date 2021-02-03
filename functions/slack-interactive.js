@@ -39,7 +39,7 @@ slackInteractions.action({ actionId: 'buy_message_seller' }, async (payload, res
 
   webClientBot.chat.postMessage({
     channel: post.data().seller,
-    text: 'user wants to buy your item!',
+    text: `<@${userId}> wants to buy your item!`,
   });
 });
 
