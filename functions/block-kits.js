@@ -98,7 +98,11 @@ const getPostBlock = ({
   ];
 };
 
-const listCommandBlock = async ({ userId, teamId }) => {
+const listCommandBlock = async ({
+  userId,
+  teamId,
+  markAsBuyMessageSent = '', // postId
+}) => {
   const postsApi = new PostsApi({ userId, teamId });
   const posts = await postsApi.where('sold', '==', false).get();
 
@@ -108,8 +112,13 @@ const listCommandBlock = async ({ userId, teamId }) => {
   posts.forEach(doc => {
     userInfoPromises.push(new Promise(async (resolve) => {
       const { title, price, seller, description, date_posted, sold, image } = doc.data();
-
       const userInfo = await webClientBot.users.info({ user: seller });
+
+      let appendable = [listPostActionButtons(doc)];
+      if (markAsBuyMessageSent === doc.id) {
+        appendable = [getMrkdwnBlock('Message Sent :white_check_mark:')];
+      }
+
       blocks = blocks.concat(getPostBlock({
         display_name: userInfo.user.profile.display_name,
         title,
@@ -118,7 +127,7 @@ const listCommandBlock = async ({ userId, teamId }) => {
         date_posted,
         image,
         sold,
-      }, [listPostActionButtons(doc)]));
+      }, appendable));
 
       resolve();
     }));

@@ -5,7 +5,7 @@ const { db, admin, logger, webClientBot } = require('./utils');
 const triggerSellModal = require('./trigger-sell-modal');
 const { getMylistBlocks } = require('./mylist-handler');
 const { PostsApi } = require('./db-api');
-const { getPostBlock, getMrkdwnBlock } = require('./block-kits');
+const { getPostBlock, getMrkdwnBlock, listCommandBlock } = require('./block-kits');
 
 const slackInteractions = createMessageAdapter(functions.config().slack.signing_secret);
 
@@ -46,10 +46,16 @@ slackInteractions.action({ actionId: 'buy_message_seller' }, async (payload, res
     }),
   ];
 
-
   webClientBot.chat.postMessage({
     channel: post.data().seller,
     blocks,
+  });
+
+  respond({
+    replace_original: true,
+    blocks: listCommandBlock({
+      userId, teamId, markAsBuyMessageSent: post.id,
+    }),
   });
 });
 
