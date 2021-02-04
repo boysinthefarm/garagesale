@@ -8,6 +8,7 @@ const getMrkdwnBlock = (text) => {
     text: {
       type: 'mrkdwn',
       text,
+    },
   };
 };
 
