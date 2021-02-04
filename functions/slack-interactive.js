@@ -5,6 +5,7 @@ const { db, admin, logger, webClientBot } = require('./utils');
 const triggerSellModal = require('./trigger-sell-modal');
 const { getMylistBlocks } = require('./mylist-handler');
 const { PostsApi } = require('./db-api');
+const { getPostBlock } = require('./block-kits');
 
 const slackInteractions = createMessageAdapter(functions.config().slack.signing_secret);
 
@@ -33,13 +34,17 @@ slackInteractions.action({ actionId: 'mark_as_sold' }, async (payload, respond) 
 slackInteractions.action({ actionId: 'buy_message_seller' }, async (payload, respond) => {
   logger.log('--- buy_message_seller ---', payload);
 
-  const { user: { id: userId, team_id: teamId } } = payload;
+  const { user: { id: userId, team_id: teamId, name: buyerName } } = payload;
   const postsApi = new PostsApi({ userId, teamId });
   const post = await postsApi.doc(payload.actions[0].value).get();
 
   webClientBot.chat.postMessage({
     channel: post.data().seller,
     text: `<@${userId}> wants to buy your item!`,
+    blocks: [getPostBlock({
+      ...post.data(),
+      display_name: buyerName,
+    })],
   });
 });
 
