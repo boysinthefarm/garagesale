@@ -2,6 +2,15 @@ const commaNumber = require('comma-number');
 
 let divider = { type: 'divider' };
 
+const getMrkdwnBlock = (text) => {
+  return {
+    type: 'section',
+    text: {
+      type: 'mrkdwn',
+      text,
+  };
+};
+
 const listPostActionButtons = (doc) => {
   return {
     "type": "actions",
@@ -87,6 +96,7 @@ const getPostBlock = ({
 };
 
 module.exports = {
+  getMrkdwnBlock,
   getPostBlock,
   listPostActionButtons,
   myPostActionButtons,
