@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 const triggerSellModal = require('./trigger-sell-modal');
 const { mylistHandler } = require('./mylist-handler');
-const { getPostBlock, listPostActionButtons } = require('./block-kits');
+const { listCommandBlock } = require('./block-kits');
 const { logger, webClientBot } = require('./utils');
 const { PostsApi } = require('./db-api');
 
@@ -26,38 +26,10 @@ module.exports = () => {
       }
      */
 
-    const { trigger_id, user_id, team_id } = req.body;
+    const { user_id: userId, team_id: teamId } = req.body;
 
     if (req.body.text === 'list') {
-      const postsApi = new PostsApi({
-        userId: user_id,
-        teamId: team_id,
-      });
-      const posts = await postsApi.where('sold', '==', false).get();
-
-      let blocks = [];
-      const userInfoPromises = [];
-
-      posts.forEach(doc => {
-        userInfoPromises.push(new Promise(async (resolve) => {
-          const { title, price, seller, description, date_posted, sold, image } = doc.data();
-
-          const userInfo = await webClientBot.users.info({ user: seller });
-          blocks = blocks.concat(getPostBlock({
-            display_name: userInfo.user.profile.display_name,
-            title,
-            description,
-            price,
-            date_posted,
-            image,
-            sold,
-          }, [listPostActionButtons(doc)]));
-
-          resolve();
-        }));
-      });
-
-      await Promise.all(userInfoPromises);
+      const blocks = await listCommandBlock({ userId, teamId });
 
       res.send({
         "response_type": "in_channel",

@@ -1,4 +1,5 @@
 const commaNumber = require('comma-number');
+const { PostsApi } = require('./db-api');
 
 let divider = { type: 'divider' };
 
@@ -96,7 +97,39 @@ const getPostBlock = ({
   ];
 };
 
+const listCommandBlock = async ({ userId, teamId }) => {
+  const postsApi = new PostsApi({ userId, teamId });
+  const posts = await postsApi.where('sold', '==', false).get();
+
+  let blocks = [];
+  const userInfoPromises = [];
+
+  posts.forEach(doc => {
+    userInfoPromises.push(new Promise(async (resolve) => {
+      const { title, price, seller, description, date_posted, sold, image } = doc.data();
+
+      const userInfo = await webClientBot.users.info({ user: seller });
+      blocks = blocks.concat(getPostBlock({
+        display_name: userInfo.user.profile.display_name,
+        title,
+        description,
+        price,
+        date_posted,
+        image,
+        sold,
+      }, [listPostActionButtons(doc)]));
+
+      resolve();
+    }));
+  });
+
+  await Promise.all(userInfoPromises);
+
+  return blocks;
+};
+
 module.exports = {
+  listCommandBlock,
   getMrkdwnBlock,
   getPostBlock,
   listPostActionButtons,
