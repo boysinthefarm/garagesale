@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const triggerSellModal = require('./trigger-sell-modal');
 const { mylistHandler } = require('./mylist-handler');
 const { listCommandBlock } = require('./block-kits');
-const { logger, webClientBot } = require('./utils');
+const { logger } = require('./utils');
 const { PostsApi } = require('./db-api');
 
 module.exports = () => {
