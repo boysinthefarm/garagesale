@@ -41,10 +41,10 @@ slackInteractions.action({ actionId: 'buy_message_seller' }, async (payload, res
   webClientBot.chat.postMessage({
     channel: post.data().seller,
     text: `<@${userId}> wants to buy your item!`,
-    blocks: [getPostBlock({
+    blocks: getPostBlock({
       ...post.data(),
       display_name: buyerName,
-    })],
+    }),
   });
 });
 
