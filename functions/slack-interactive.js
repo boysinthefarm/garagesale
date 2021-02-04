@@ -42,7 +42,7 @@ slackInteractions.action({ actionId: 'buy_message_seller' }, async (payload, res
     getMrkdwnBlock(`<@${userId}> wants to buy your item!`),
     ...getPostBlock({
       ...post.data(),
-      display_name: You,
+      display_name: 'You',
     }),
   ];
 
