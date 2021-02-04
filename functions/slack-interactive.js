@@ -34,7 +34,7 @@ slackInteractions.action({ actionId: 'mark_as_sold' }, async (payload, respond) 
 slackInteractions.action({ actionId: 'buy_message_seller' }, async (payload, respond) => {
   logger.log('--- buy_message_seller ---', payload);
 
-  const { user: { id: userId, team_id: teamId, name: buyerName } } = payload;
+  const { user: { id: userId, team_id: teamId } } = payload;
   const postsApi = new PostsApi({ userId, teamId });
   const post = await postsApi.doc(payload.actions[0].value).get();
 
@@ -42,7 +42,7 @@ slackInteractions.action({ actionId: 'buy_message_seller' }, async (payload, res
     getMrkdwnBlock(`<@${userId}> wants to buy your item!`),
     ...getPostBlock({
       ...post.data(),
-      display_name: buyerName,
+      display_name: You,
     }),
   ];
 
