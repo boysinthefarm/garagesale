@@ -38,17 +38,16 @@ slackInteractions.action({ actionId: 'buy_message_seller' }, async (payload, res
   const postsApi = new PostsApi({ userId, teamId });
   const post = await postsApi.doc(payload.actions[0].value).get();
 
-  const blocks = [
-    getMrkdwnBlock(`<@${userId}> wants to buy your item!`),
-    ...getPostBlock({
-      ...post.data(),
-      display_name: 'You',
-    }),
-  ];
 
-  webClientBot.chat.postMessage({
+  await webClientBot.chat.postMessage({
     channel: post.data().seller,
-    blocks,
+    blocks: [
+      getMrkdwnBlock(`<@${userId}> wants to buy your item!`),
+      ...getPostBlock({
+        ...post.data(),
+        display_name: 'You',
+      }),
+    ],
   });
 
   respond({

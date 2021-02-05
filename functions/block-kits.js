@@ -1,6 +1,6 @@
 const commaNumber = require('comma-number');
 const { PostsApi } = require('./db-api');
-const { webClientBot } = require('./utils');
+const { webClientBot, logger } = require('./utils');
 
 let divider = { type: 'divider' };
 
@@ -111,12 +111,19 @@ const listCommandBlock = async ({
 
   posts.forEach(doc => {
     userInfoPromises.push(new Promise(async (resolve) => {
-      const { title, price, seller, description, date_posted, sold, image } = doc.data();
-      const userInfo = await webClientBot.users.info({ user: seller });
+      logger.log('doc.id', doc.id);
+      logger.log('markAsBuyMessageSent:', markAsBuyMessageSent);
 
-      let appendable = [listPostActionButtons(doc)];
+      const { title, price, seller, description, date_posted, sold, image } = doc.data();
+      logger.log('seller:', seller);
+      const userInfo = await webClientBot.users.info({ user: seller });
+      logger.log('userInfo:', userInfo);
+
+      let appendable = [];
       if (markAsBuyMessageSent === doc.id) {
         appendable = [getMrkdwnBlock('Message Sent :white_check_mark:')];
+      } else {
+        appendable = [listPostActionButtons(doc)];
       }
 
       blocks = blocks.concat(getPostBlock({
