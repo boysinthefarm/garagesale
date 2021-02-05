@@ -52,7 +52,7 @@ slackInteractions.action({ actionId: 'buy_message_seller' }, async (payload, res
 
   respond({
     replace_original: true,
-    blocks: listCommandBlock({
+    blocks: await listCommandBlock({
       userId, teamId, markAsBuyMessageSent: post.id,
     }),
   });
