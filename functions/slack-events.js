@@ -2,7 +2,7 @@ const express = require('express');
 const functions = require('firebase-functions');
 const { createEventAdapter } = require('@slack/events-api');
 const { logger, webClientBot, webClientUser } = require('./utils');
-const { listCommandBlock, sellThisItemBlock } = require('./block-kits');
+const { listCommandBlock, sellThisItemBlock, divider } = require('./block-kits');
 
 // files: event.files
 const getImageFiles = (files) => {
@@ -87,11 +87,24 @@ slackEvents.on('app_home_opened', async(event) => {
     }
   } = await webClientBot.users.info({ user: userId });
 
+  const blocks = [
+    {
+      type: 'header',
+      text: {
+        type: 'plain_text',
+        text: 'Welcome :partying_face: \n Check out what your fellow coworkers are selling right now! :kite:',
+        emoji: true,
+      },
+    },
+    divider,
+    ...await listCommandBlock({ userId, teamId }),
+  ];
+
   webClientBot.views.publish({
     user_id: userId,
     view: {
       type: 'home',
-      blocks: await listCommandBlock({ userId, teamId }),
+      blocks,
     },
   });
 });

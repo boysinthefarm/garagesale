@@ -165,6 +165,7 @@ const sellThisItemBlock = (imageUrl) => {
 }
 
 module.exports = {
+  divider,
   listCommandBlock,
   getMrkdwnBlock,
   getPostBlock,
