@@ -24,7 +24,7 @@ const getImagePublicLink = (image) => {
 
 const slackEvents = createEventAdapter(functions.config().slack.signing_secret);
 
-slackEvents.on('app_home_opened', (event) => {
+slackEvents.on('app_home_opened', async(event) => {
   logger.log('-- app_home_opened ---', event);
   /* example event
     {
