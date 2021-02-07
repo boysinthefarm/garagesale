@@ -2,6 +2,7 @@ const express = require('express');
 const functions = require('firebase-functions');
 const { createEventAdapter } = require('@slack/events-api');
 const { logger, webClientBot, webClientUser } = require('./utils');
+const { listCommandBlock } = require('./block-kits');
 
 // files: event.files
 const getImageFiles = (files) => {
@@ -25,6 +26,29 @@ const slackEvents = createEventAdapter(functions.config().slack.signing_secret);
 
 slackEvents.on('app_home_opened', (event) => {
   logger.log('-- app_home_opened ---', event);
+  /* example event
+    {
+      "type":"app_home_opened",
+      "user":"U01KMTKK9FA",
+      "channel":"D01JY31KPNE",
+      "event_ts":"1612638222.652394",
+      "tab":"home"
+    }
+  */
+  const { user: userId } = event;
+  const {
+    user: {
+      team_id: teamId,
+    }
+  } = await webClientBot.users.info({ user: userId });
+
+  webClientBot.views.publish({
+    user_id: userId,
+    view: {
+      type: 'home',
+      blocks: await listCommandBlock({ userId, teamId }),
+    },
+  });
 });
 
 slackEvents.on('message.im', (event) => {

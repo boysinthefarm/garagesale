@@ -2,9 +2,19 @@ const { db, webClientBot } = require('./utils');
 const { getPostBlock, myPostActionButtons } = require('./block-kits');
 const { PostsApi } = require('./db-api');
 
-const getMylistBlocks = async ({ userId, teamId }) => {
+const getMylistBlocks = async ({ userId }) => {
   // these two requests should be parallel
   const userInfo = await webClientBot.users.info({ user: userId });
+  const {
+    userInfo: {
+      user: {
+        team_id: teamId,
+      },
+      profile: {
+        display_name: displayName,
+      }
+    },
+  } = userInfo;
 
   const postsApi = new PostsApi({ userId,  teamId });
   const posts = await postsApi.where('seller', '==', userId).get();
@@ -14,7 +24,7 @@ const getMylistBlocks = async ({ userId, teamId }) => {
     const buttons = myPostActionButtons(doc);
     blocks = blocks.concat(getPostBlock({
       ...doc.data(),
-      display_name: userInfo.user.profile.display_name,
+      display_name: displayName,
     }, buttons ? [buttons] : undefined));
   });
 
