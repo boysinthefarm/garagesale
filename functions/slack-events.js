@@ -46,7 +46,7 @@ const makeImagePublic = (image) => {
   returns either a webClient post promise
   or false if sell flow is not triggered
  */
-function triggerSellFlow(event) {
+async function triggerSellFlow(event) {
   const { files } = event;
   if (files) {
     // filter files for images
@@ -104,31 +104,7 @@ slackEvents.on('message', (event) => {
   logger.log('-- message ---', event);
   /* example event
   {
-    "files": [{
-      "mimetype":"image/jpeg",
-      "public_url_shared":false,
-      "editable":false,
-      "user":"U01KMTKK9FA",
-      "mode":"hosted",
-      "thumb_tiny":"AwAwADCoYxUZCg1LLwvHepbeBcAtyfelew0rlXA/u00gdRWqyDHSqU8W18gcGkmNxKtPRT1p2zinxjFWSPkGUP51JFIFXkHHrUatv4Ap8YVck9RWbLiTO7MoxnB9KjKkodwwPrSrKNuADketBctxngetIobMAYVPH4VCoolZvlGSR2FMLOvUYq1sZy3JYBgZBokODupYYmZeOKm8gKuXOTRYd7IbC20fKufellJJA6sajkUooZSRk4q3aW5T95J989Ae1FtQ5rq4qwCO3ZpOuM/Sq0mJIs4qa+myfKU9OWqoG6jtVqOhNz//2Q==","thumb_360":"https://files.slack.com/files-tmb/T01JY8V5675-F01M9P69S11-22544a878c/will-smith-9542165-1-402_360.jpg",
-      "thumb_160":"https://files.slack.com/files-tmb/T01JY8V5675-F01M9P69S11-22544a878c/will-smith-9542165-1-402_160.jpg",
-      "username":"","thumb_80":"https://files.slack.com/files-tmb/T01JY8V5675-F01M9P69S11-22544a878c/will-smith-9542165-1-402_80.jpg",
-      "url_private_download":"https://files.slack.com/files-pri/T01JY8V5675-F01M9P69S11/download/will-smith-9542165-1-402.jpg",
-      "pretty_type":"JPEG","thumb_64":"https://files.slack.com/files-tmb/T01JY8V5675-F01M9P69S11-22544a878c/will-smith-9542165-1-402_64.jpg",
-      "thumb_360_h":300, "timestamp":1612722169,
-      "is_external":false,
-      "name":"will-smith-9542165-1-402.jpg",
-      "permalink":"https://slackgaragesale.slack.com/files/U01KMTKK9FA/F01M9P69S11/will-smith-9542165-1-402.jpg","url_private":"https://files.slack.com/files-pri/T01JY8V5675-F01M9P69S11/will-smith-9542165-1-402.jpg",
-      "created":1612722169,
-      "display_as_bot":false,"title":"will-smith-9542165-1-402.jpg",
-      "permalink_public":"https://slack-files.com/T01JY8V5675-F01M9P69S11-191c39d61e",
-      "size":17172,"original_w":300,
-      "is_public":false,"thumb_360_w":300,
-      "id":"F01M9P69S11",
-      "original_h":300,"filetype":"jpg",
-      "has_rich_preview":false,
-      "external_type":""
-    }],
+    "files": [{...}],
     "channel_type":"im",
     "type":"message",
     "user":"U01KMTKK9FA","display_as_bot":false,
