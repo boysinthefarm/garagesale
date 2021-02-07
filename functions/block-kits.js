@@ -140,11 +140,36 @@ const listCommandBlock = async ({
   return blocks;
 };
 
+const sellThisItemBlock = (imageUrl) => {
+  const blocks = [];
+  blocks.push({
+    type: 'image',
+    image_url: imageUrl,
+    alt_text: 'item for sale',
+  });
+  blocks.push({
+    type: 'actions',
+    elements: [{
+      type: 'button',
+      text: {
+        type: 'plain_text',
+        text: 'Sell This Item!',
+        emoji: true,
+      },
+      value: imageUrl,
+      action_id: 'sell_this_item',
+    }],
+  });
+
+  return blocks;
+}
+
 module.exports = {
   listCommandBlock,
   getMrkdwnBlock,
   getPostBlock,
   listPostActionButtons,
   myPostActionButtons,
+  sellThisItemBlock,
 };
 
