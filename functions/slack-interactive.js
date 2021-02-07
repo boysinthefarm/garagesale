@@ -34,18 +34,19 @@ slackInteractions.action({ actionId: 'mark_as_sold' }, async (payload, respond) 
 slackInteractions.action({ actionId: 'buy_message_seller' }, async (payload, respond) => {
   logger.log('--- buy_message_seller ---', payload);
 
-  const { user: { id: userId, team_id: teamId } } = payload;
-  const postsApi = new PostsApi({ userId, teamId });
+  const { user: { id: buyer, team_id: teamId } } = payload;
+  const postsApi = new PostsApi({ userId: buyer, teamId });
   const post = await postsApi.doc(payload.actions[0].value).get();
+  const { seller } = post.data();
 
   const { channel: { id: channel } } = await webClientBot.conversations.open({
-    users: `${userId},${post.data().seller}`,
+    users: `${buyer},${seller}`,
   });
 
   webClientBot.chat.postMessage({
     channel,
     blocks: [
-      getMrkdwnBlock(`<@${userId}> wants to buy your item!`),
+      getMrkdwnBlock(`Hi <@${seller}> :wave: \n <@${buyer}> wants to buy your item!`),
       ...getPostBlock({
         ...post.data(),
         display_name: 'You',
@@ -56,7 +57,7 @@ slackInteractions.action({ actionId: 'buy_message_seller' }, async (payload, res
   respond({
     replace_original: true,
     blocks: await listCommandBlock({
-      userId, teamId, markAsBuyMessageSent: post.id,
+      userId: buyer, teamId, markAsBuyMessageSent: post.id,
     }),
   });
 });
