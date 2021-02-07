@@ -1,8 +1,15 @@
 const express = require('express');
 const functions = require('firebase-functions');
-const { createEventAdapter } = require('@slack/events-api');
 const { logger, webClientBot, webClientUser } = require('./utils');
-const { listCommandBlock, sellThisItemBlock, divider } = require('./block-kits');
+const {
+  listCommandBlock,
+  sellThisItemBlock,
+  divider,
+  getMrkdwnBlock
+} = require('./block-kits');
+
+const { createEventAdapter } = require('@slack/events-api');
+const slackEvents = createEventAdapter(functions.config().slack.signing_secret);
 
 // files: event.files
 const getImageFiles = (files) => {
@@ -67,19 +74,7 @@ async function triggerSellFlow(event) {
   return false;
 };
 
-const slackEvents = createEventAdapter(functions.config().slack.signing_secret);
-
-slackEvents.on('app_home_opened', async(event) => {
-  logger.log('-- app_home_opened ---', event);
-  /* example event
-    {
-      "type":"app_home_opened",
-      "user":"U01KMTKK9FA",
-      "channel":"D01JY31KPNE",
-      "event_ts":"1612638222.652394",
-      "tab":"home"
-    }
-  */
+async function renderHomeTab(event) {
   const { user: userId } = event;
   const {
     user: {
@@ -100,13 +95,35 @@ slackEvents.on('app_home_opened', async(event) => {
     ...await listCommandBlock({ userId, teamId }),
   ];
 
-  webClientBot.views.publish({
+  return webClientBot.views.publish({
     user_id: userId,
     view: {
       type: 'home',
       blocks,
     },
   });
+};
+
+slackEvents.on('app_home_opened', (event) => {
+  logger.log('-- app_home_opened ---', event);
+  /* example event
+    {
+      "type":"app_home_opened",
+      "user":"U01KMTKK9FA",
+      "channel":"D01JY31KPNE",
+      "event_ts":"1612638222.652394",
+      "tab":"home"
+    }
+  */
+  const { tab } = event;
+  if (tab === 'home') {
+    renderHomeTab(event);
+  } else if (tab === 'messages') {
+    webClient.chat.postMessage({
+      channel: event.user,
+      blocks: getMrkdwnBlock('Send a message here with an image atachment to start selling!'),
+    });
+  }
 });
 
 slackEvents.on('message.im', (event) => {
