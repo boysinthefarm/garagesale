@@ -121,7 +121,9 @@ slackEvents.on('app_home_opened', (event) => {
   } else if (tab === 'messages') {
     webClientBot.chat.postMessage({
       channel: event.user,
-      blocks: getMrkdwnBlock('Send a message here with an image atachment to start selling!'),
+      blocks: [
+        getMrkdwnBlock('Send a message here with an image atachment to start selling!'),
+      ],
     });
   }
 });
