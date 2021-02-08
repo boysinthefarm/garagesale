@@ -6,13 +6,11 @@ const getMylistBlocks = async ({ userId }) => {
   // these two requests should be parallel
   const userInfo = await webClientBot.users.info({ user: userId });
   const {
-    userInfo: {
-      user: {
-        team_id: teamId,
-      },
-      profile: {
-        display_name: displayName,
-      }
+    user: {
+      team_id: teamId,
+    },
+    profile: {
+      display_name: displayName,
     },
   } = userInfo;
 
