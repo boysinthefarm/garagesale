@@ -101,6 +101,31 @@ async function renderHomeTab(event) {
   });
 };
 
+async function respondMessagesTab(event) {
+  const blockIdPrefix = 'send_message_to_sell';
+  const { channel, user } = event;
+  const lastMessage = await webClientBot.conversations.history({
+    channel,
+    limit: 1,
+  });
+
+  const { event_ts, messages: { blocks } } = lastMessage;
+  // if it hasn't been sent already, send message about triggering sell flow
+  if (!blocks || !blocks.find(block => block.block_id.includes(blockIdPrefix))) {
+    return webClientBot.chat.postMessage({
+      channel: user,
+      blocks: [
+        getMrkdwnBlock(
+          'Send a message here with an image attachment to start selling!',
+          { block_id: `${blockIdPrefix}_${event_ts}` },
+        ),
+      ],
+    });
+  }
+
+  return false;
+};
+
 slackEvents.on('app_home_opened', (event) => {
   logger.log('-- app_home_opened ---', event);
   /* example event
@@ -116,12 +141,7 @@ slackEvents.on('app_home_opened', (event) => {
   if (tab === 'home') {
     renderHomeTab(event);
   } else if (tab === 'messages') {
-    webClientBot.chat.postMessage({
-      channel: event.user,
-      blocks: [
-        getMrkdwnBlock('Send a message here with an image attachment to start selling!'),
-      ],
-    });
+    respondMessagesTab(event);
   }
 });
 

@@ -15,13 +15,14 @@ function headerBlock(text) {
   };
 }
 
-const getMrkdwnBlock = (text) => {
+const getMrkdwnBlock = (text, custom = {}) => {
   return {
     type: 'section',
     text: {
       type: 'mrkdwn',
       text,
     },
+    ...custom,
   };
 };
 
