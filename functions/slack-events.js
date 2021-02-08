@@ -122,7 +122,7 @@ slackEvents.on('app_home_opened', (event) => {
     webClientBot.chat.postMessage({
       channel: event.user,
       blocks: [
-        getMrkdwnBlock('Send a message here with an image atachment to start selling!'),
+        getMrkdwnBlock('Send a message here with an image attachment to start selling!'),
       ],
     });
   }
