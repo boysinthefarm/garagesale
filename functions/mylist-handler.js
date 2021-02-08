@@ -8,9 +8,9 @@ const getMylistBlocks = async ({ userId }) => {
   const {
     user: {
       team_id: teamId,
-    },
-    profile: {
-      display_name: displayName,
+      profile: {
+        display_name: displayName,
+      },
     },
   } = userInfo;
 
