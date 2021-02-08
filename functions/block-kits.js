@@ -4,6 +4,17 @@ const { webClientBot, logger } = require('./utils');
 
 let divider = { type: 'divider' };
 
+function headerBlock(text) {
+  return {
+    type: 'header',
+    text: {
+      type: 'plain_text',
+      text,
+      emoji: true,
+    },
+  };
+}
+
 const getMrkdwnBlock = (text) => {
   return {
     type: 'section',
@@ -166,6 +177,7 @@ const sellThisItemBlock = (imageUrl) => {
 
 module.exports = {
   divider,
+  headerBlock,
   listCommandBlock,
   getMrkdwnBlock,
   getPostBlock,

@@ -5,8 +5,10 @@ const {
   listCommandBlock,
   sellThisItemBlock,
   divider,
-  getMrkdwnBlock
+  headerBlock,
+  getMrkdwnBlock,
 } = require('./block-kits');
+const { getMylistBlocks } = require('./mylist-handler');
 
 const { createEventAdapter } = require('@slack/events-api');
 const slackEvents = createEventAdapter(functions.config().slack.signing_secret);
@@ -83,16 +85,11 @@ async function renderHomeTab(event) {
   } = await webClientBot.users.info({ user: userId });
 
   const blocks = [
-    {
-      type: 'header',
-      text: {
-        type: 'plain_text',
-        text: 'Welcome :partying_face: \n Check out what your fellow coworkers are selling right now! :kite:',
-        emoji: true,
-      },
-    },
+    headerBlock('Welcome :partying_face: \n Check out what your fellow coworkers are selling right now! :kite:'),
     divider,
     ...await listCommandBlock({ userId, teamId }),
+    headerBlock('Your Garage :abacus:'),
+    ...await getMylistBlocks({ userId }),
   ];
 
   return webClientBot.views.publish({
