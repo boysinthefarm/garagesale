@@ -37,6 +37,7 @@ const makeImagePublic = (image) => {
   if (!image.public_url_shared) {
     return webClientUser.files.sharedPublicURL({ file: image.id })
       .catch((error) => {
+        logger.log('----- sharedPublicURL error:', error);
         if (error.message === 'already_public') {
           return getImagePublicLink(image);
         }
@@ -61,6 +62,7 @@ async function triggerSellFlow(event) {
     // filter files for images
     // wait to make sure all of the urls have become public
     const imageUrls = await Promise.all(getImageFiles(files).map(makeImagePublic));
+    logger.log('imageUrls:', imageUrls);
 
     // make blocks out of image urls
     const blocks = imageUrls.flatMap(sellThisItemBlock);
