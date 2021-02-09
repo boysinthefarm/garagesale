@@ -4,7 +4,7 @@ const admin = require('firebase-admin');
 const express = require('express');
 const app = express();
 
-const slackCommandHandlerFactory = require('./slack-command-handler');
+const slackCommandHandler = require('./slack-command-handler');
 const slackEvents = require('./slack-events');
 const slackInteractive = require('./slack-interactive');
 
@@ -17,5 +17,5 @@ exports.slackBot = functions.https.onRequest(slackEvents);
 
 exports.slackInteractive = functions.https.onRequest(slackInteractive);
 
-exports.slackCommand = functions.https.onRequest(slackCommandHandlerFactory());
+exports.slackCommand = functions.https.onRequest(slackCommandHandler);
 

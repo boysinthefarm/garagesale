@@ -7,6 +7,7 @@ class PostsApi {
    * wrapper around db.collection('posts')
    * When interacting with firestore, use this class
    * to handle data access
+   * interface designed to match firestore db api
   */
   constructor({
     userId,

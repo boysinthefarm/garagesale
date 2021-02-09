@@ -145,10 +145,6 @@ slackEvents.on('app_home_opened', (event) => {
   }
 });
 
-slackEvents.on('message.im', (event) => {
-  logger.log('-- message.im ---', event);
-});
-
 slackEvents.on('message', (event) => {
   logger.log('-- message ---', event);
   /* example event

@@ -1,3 +1,7 @@
+/*
+ * functions related to generating slack block kits
+ */
+  
 const commaNumber = require('comma-number');
 const { PostsApi } = require('./db-api');
 const { webClientBot, logger } = require('./utils');
