@@ -7,6 +7,7 @@ const app = express();
 const slackCommandHandler = require('./slack-command-handler');
 const slackEvents = require('./slack-events');
 const slackInteractive = require('./slack-interactive');
+const slackRedirect = require('./slack-redirect');
 
 app.get('/', (req, res) => {
     res.send('<html><body><h1>slack-garage-sale</h1></body></html>');
@@ -19,3 +20,4 @@ exports.slackInteractive = functions.https.onRequest(slackInteractive);
 
 exports.slackCommand = functions.https.onRequest(slackCommandHandler);
 
+exports.slackRedirect = functions.https.onRequest(slackRedirect);
