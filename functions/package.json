@@ -16,6 +16,7 @@
   "dependencies": {
     "@slack/events-api": "^3.0.0",
     "@slack/interactive-messages": "^2.0.0",
+    "@slack/oauth": "^2.0.1",
     "@slack/web-api": "^6.0.0",
     "comma-number": "^2.0.1",
     "express": "^4.17.1",
