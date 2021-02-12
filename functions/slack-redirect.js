@@ -5,10 +5,11 @@ const { logger } = require('./utils');
 const {
   client_id: clientId,
   client_secret: clientSecret,
+  state_secret: stateSecret,
 } = functions.config().slack;
 
 // initialize the installProvider
-const installer = new InstallProvider({ clientId, clientSecret });
+const installer = new InstallProvider({ clientId, clientSecret, stateSecret });
 
 module.exports = (req, res) => {
   logger.log('---- redirect ----', req.body);
