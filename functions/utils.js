@@ -41,7 +41,7 @@ const installer = new InstallProvider({
         storePromises.push(
           db.collection('installations')
           .doc(installation.team.id)
-          .set(installation, {merge: true});
+          .set(installation, {merge: true})
         );
       }
 
