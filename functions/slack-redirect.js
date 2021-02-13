@@ -1,18 +1,8 @@
-const functions = require('firebase-functions');
-const { InstallProvider } = require('@slack/oauth');
-const { logger } = require('./utils');
+const { logger, installer } = require('./utils');
 
-const {
-  client_id: clientId,
-  client_secret: clientSecret,
-  state_secret: stateSecret,
-} = functions.config().slack;
-
-// initialize the installProvider
-const installer = new InstallProvider({ clientId, clientSecret, stateSecret });
 
 module.exports = (req, res) => {
-  logger.log('---- redirect ----', req.body);
+  logger.log('---- redirect ----', req);
   installer.handleCallback(req, res);
 };
 
