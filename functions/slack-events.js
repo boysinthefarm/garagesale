@@ -114,10 +114,9 @@ async function respondMessagesTab(event) {
   const { event_ts, messages: { blocks } } = lastMessage;
   // if it hasn't been sent already, send message about triggering sell flow
   if (!blocks || !blocks.find(block => block.block_id.includes(blockIdPrefix))) {
-    logger.log('permissions block:', askPermissionBlock({ blockId: `${blockIdPrefix}_${event_ts}` })); 
     return webClientBot.chat.postMessage({
       channel: user,
-      blocks: askPermissionBlock({ blockId: `${blockIdPrefix}_${event_ts}` }),
+      blocks: await askPermissionBlock({ blockId: `${blockIdPrefix}_${event_ts}` }),
     });
   }
 
