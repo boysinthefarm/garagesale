@@ -5,6 +5,7 @@ const { InstallProvider } = require('@slack/oauth');
 
 admin.initializeApp(functions.config().firebase);
 const db = admin.firestore();
+db.settings({ ignoreUndefinedProperties: true  });
 
 const {
   client_id: clientId,
