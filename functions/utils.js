@@ -75,6 +75,9 @@ const installer = new InstallProvider({
   }
 });
 
+/*
+ * returns Promise
+*/
 function generateInstallUrl() {
   return installer.generateInstallUrl({
     // Add the scopes your app needs

@@ -180,8 +180,8 @@ const sellThisItemBlock = (imageUrl) => {
   return blocks;
 }
 
-function askPermissionBlock({ blockId }) {
-  const url = generateInstallUrl();
+async function askPermissionBlock({ blockId }) {
+  const url = await generateInstallUrl();
   return [{
     block_id: blockId,
     "type": "section",
