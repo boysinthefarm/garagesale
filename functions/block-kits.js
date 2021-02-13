@@ -4,7 +4,7 @@
   
 const commaNumber = require('comma-number');
 const { PostsApi } = require('./db-api');
-const { webClientBot, logger } = require('./utils');
+const { webClientBot, logger, generateInstallUrl } = require('./utils');
 
 let divider = { type: 'divider' };
 
@@ -180,6 +180,29 @@ const sellThisItemBlock = (imageUrl) => {
   return blocks;
 }
 
+function askPermissionBlock({ blockId }) {
+  const url = generateInstallUrl();
+  return [{
+    block_id: blockId,
+    "type": "section",
+    "text": {
+      "type": "mrkdwn",
+      "text": 'To start selling, Garage Sale needs permission to access your slack images.',
+    },
+    "accessory": {
+      "type": "button",
+      "text": {
+        "type": "plain_text",
+        "text": "Give Permission",
+        "emoji": true
+      },
+      "value": url,
+      url,
+      "action_id": 'give_permission',
+    }
+  }];
+};
+
 module.exports = {
   divider,
   headerBlock,
@@ -189,5 +212,6 @@ module.exports = {
   listPostActionButtons,
   myPostActionButtons,
   sellThisItemBlock,
+  askPermissionBlock,
 };
 

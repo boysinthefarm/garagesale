@@ -6,7 +6,7 @@ const {
   sellThisItemBlock,
   divider,
   headerBlock,
-  getMrkdwnBlock,
+  askPermissionBlock,
 } = require('./block-kits');
 const { getMylistBlocks } = require('./mylist-handler');
 
@@ -116,12 +116,7 @@ async function respondMessagesTab(event) {
   if (!blocks || !blocks.find(block => block.block_id.includes(blockIdPrefix))) {
     return webClientBot.chat.postMessage({
       channel: user,
-      blocks: [
-        getMrkdwnBlock(
-          'Send a message here with an image attachment to start selling!',
-          { block_id: `${blockIdPrefix}_${event_ts}` },
-        ),
-      ],
+      blocks: askPermissionBlock({ blockId: `${blockIdPrefix}_${event_ts}` }),
     });
   }
 
