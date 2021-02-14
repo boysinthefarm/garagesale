@@ -60,7 +60,8 @@ class PostsApi {
       throw new UnauthorizedError('Not authorized to modify post');
     }
 
-    return this.currentRef.update(param);
+    // currentRef is spent after calling .get()
+    return this.collection.doc(doc.id).update(param);
   }
 }
 
