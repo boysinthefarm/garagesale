@@ -81,8 +81,8 @@ const installer = new InstallProvider({
   }
 });
 
-function botClientFactory(query) {
-  const installation = installer.authorize(query);
+async function botClientFactory(query) {
+  const installation = await installer.authorize(query);
   return new WebClient(installation.botToken);
 };
 
@@ -106,7 +106,8 @@ function generateInstallUrl() {
 };
 
 function postMessageSellInstruction(event) {
-  return botClientFactory({ userId: event.user }).chat.postMessage({
+  const client = await botClientFactory({ userId: event.user });
+  return client.chat.postMessage({
     channel: event.user,
     blocks: [getMrkdwnBlock(
       'Send a message here with an image attachment to start selling!',
