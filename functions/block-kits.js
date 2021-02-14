@@ -5,6 +5,7 @@
 const commaNumber = require('comma-number');
 const { PostsApi } = require('./db-api');
 const { webClientBot, logger } = require('./utils');
+const { generateInstallUrl } = require('./slack-installer');
 
 let divider = { type: 'divider' };
 
@@ -180,7 +181,8 @@ const sellThisItemBlock = (imageUrl) => {
   return blocks;
 }
 
-async function askPermissionBlock(url) {
+async function askPermissionBlock() {
+  const url = await generateInstallUrl();
   return [{
     block_id: `ask_permission_${Date.now()}`,
     "type": "section",

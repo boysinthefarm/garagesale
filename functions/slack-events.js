@@ -14,7 +14,7 @@ const { getMylistBlocks } = require('./mylist-handler');
 const {
   postMessageSellInstruction,
   postMessageRequestPermission,
-} = require('./post-message');
+} = require('./slack-installer');
 
 const { createEventAdapter } = require('@slack/events-api');
 const slackEvents = createEventAdapter(functions.config().slack.signing_secret);
