@@ -9,6 +9,8 @@ const { getPostBlock, getMrkdwnBlock, listCommandBlock } = require('./block-kits
 
 const slackInteractions = createMessageAdapter(functions.config().slack.signing_secret);
 
+slackInteractions.action({ actionId: 'give_permission' }, () => {});
+
 // handler for when user clicks on the button to "Sell This Item!"
 slackInteractions.action({ actionId: 'sell_this_item' }, (payload, respond) => {
   logger.log('--- sell_this_item ----', payload);
