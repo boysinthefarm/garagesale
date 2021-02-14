@@ -2,6 +2,7 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const { WebClient } = require('@slack/web-api');
 const { InstallProvider } = require('@slack/oauth');
+const { postMessageSellInstruction } = require('./post-message');
 
 admin.initializeApp(functions.config().firebase);
 const db = admin.firestore();
@@ -52,6 +53,10 @@ const installer = new InstallProvider({
           db.collection('users')
           .doc(installation.user.id)
           .set(installation.user, {merge: true})
+          .then(() => {
+            // let the user know that he can start selling
+            postMessageSellInstruction({ user: installation.user.id });
+          })
         );
       }
 

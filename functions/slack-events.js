@@ -11,6 +11,10 @@ const {
   askPermissionBlock,
 } = require('./block-kits');
 const { getMylistBlocks } = require('./mylist-handler');
+const {
+  postMessageSellInstruction,
+  postMessageRequestPermission,
+} = require('./post-message');
 
 const { createEventAdapter } = require('@slack/events-api');
 const slackEvents = createEventAdapter(functions.config().slack.signing_secret);
@@ -120,24 +124,6 @@ async function renderHomeTab(event) {
       type: 'home',
       blocks,
     },
-  });
-};
-
-// send a message to app "Messages" tab to ask user to give us permission
-async function postMessageRequestPermission(event) {
-  return webClientBot.chat.postMessage({
-    channel: event.user,
-    blocks: await askPermissionBlock(),
-  });
-};
-
-function postMessageSellInstruction(event) {
-  return webClientBot.chat.postMessage({
-    channel: event.user,
-    blocks: [getMrkdwnBlock(
-      'Send a message here with an image attachment to start selling!',
-      { block_id: `sell_instruction_${Date.now()}` },
-    )],
   });
 };
 
