@@ -56,20 +56,23 @@ const installer = new InstallProvider({
 
       return Promise.all(storePromises);
     },
-    fetchInstallation: async (installQuery) => {
+    fetchInstallation: async ({
+      isEnterpriseInstall,
+      enterpriseId,
+      teamId,
+      userId,
+    }) => {
       const installationId = '';
 
-      if (installQuery.isEnterpriseInstall) {
-        if (installQuery.enterpriseId !== undefined) {
-          // org installation
-          installationId = installQuery.enterpriseId;
-        }
-      } else if (installQuery.teamId !== undefined) {
+      if (isEnterpriseInstall && enterpriseId) {
+        // org installation
+        installationId = enterpriseId;
+      } else if (teamId !== undefined) {
         // single team installation
-        installationId = installQuery.teamId;
-      } else if (installQuery.userId) {
+        installationId = teamId;
+      } else if (userId) {
         const user = await db.collection('users')
-          .doc(installQuery.userId).get();
+          .doc(userId).get();
         installationId = user.data().installationId;
       }
 
