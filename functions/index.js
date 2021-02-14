@@ -2,7 +2,8 @@ const fetch = require('node-fetch');
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const express = require('express');
-const { installer, generateInstallUrl } = require('./utils');
+const { installer } = require('./utils');
+const { generateInstallUrl } = require('./slack-installer');
 const app = express();
 
 const slackCommandHandler = require('./slack-command-handler');

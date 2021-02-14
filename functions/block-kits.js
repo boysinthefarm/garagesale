@@ -4,7 +4,8 @@
   
 const commaNumber = require('comma-number');
 const { PostsApi } = require('./db-api');
-const { webClientBot, logger, generateInstallUrl } = require('./utils');
+const { webClientBot, logger } = require('./utils');
+const { generateInstallUrl } = require('./slack-installer');
 
 let divider = { type: 'divider' };
 
