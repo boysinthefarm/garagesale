@@ -101,7 +101,7 @@ function postMessageSellInstruction(event) {
 async function postMessageRequestPermission(event) {
   return webClientBot.chat.postMessage({
     channel: event.user,
-    blocks: await askPermissionBlock(),
+    blocks: askPermissionBlock(await generateInstallUrl()),
   });
 };
 
