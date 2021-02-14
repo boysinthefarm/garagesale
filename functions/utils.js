@@ -1,9 +1,8 @@
 const functions = require('firebase-functions');
-const admin = require('firebase-admin');
 const { WebClient } = require('@slack/web-api');
 const { InstallProvider } = require('@slack/oauth');
 const { postMessageSellInstruction } = require('./post-message');
-const { admin, db } = require('./db-api');
+const { db } = require('./db-api');
 
 const {
   client_id: clientId,
@@ -97,7 +96,6 @@ function generateInstallUrl() {
 };
 
 module.exports = {
-  admin,
   logger: functions.logger,
   db,
   webClientBot,
