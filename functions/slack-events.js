@@ -1,7 +1,7 @@
 const express = require('express');
 const functions = require('firebase-functions');
 const { WebClient } = require('@slack/web-api');
-const { logger, webClientBot, webClientUser } = require('./utils');
+const { logger, db, webClientBot, webClientUser } = require('./utils');
 const {
   listCommandBlock,
   sellThisItemBlock,
