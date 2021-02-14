@@ -117,7 +117,6 @@ async function renderHomeTab(event) {
     headerBlock('Your Lemonade Stand :lemon:'),
     ...await getMylistBlocks({ userId }),
     headerBlock('Your sold items :moneybag:'),
-    divider,
     ...await getMyListHistoryBlocks({ userId }),
   ];
 
