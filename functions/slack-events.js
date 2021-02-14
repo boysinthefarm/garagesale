@@ -118,7 +118,7 @@ async function renderHomeTab(event) {
     ...await getMylistBlocks({ userId }),
     headerBlock('Your sold items :moneybag:'),
     divider,
-    ...await getMylistHistoryBlocks({ userId }),
+    ...await getMyListHistoryBlocks({ userId }),
   ];
 
   return webClientBot.views.publish({
