@@ -134,10 +134,10 @@ async function postMessageRequestPermission(event) {
 function postMessageSellInstruction(event) {
   return webClientBot.chat.postMessage({
     channel: event.user,
-    blocks: getMrkdwnBlock(
+    blocks: [getMrkdwnBlock(
       'Send a message here with an image attachment to start selling!',
       { block_id: `sell_instruction_${Date.now()}` },
-    ),
+    )],
   });
 };
 
