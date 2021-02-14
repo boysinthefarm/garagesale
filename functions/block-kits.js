@@ -4,7 +4,7 @@
   
 const commaNumber = require('comma-number');
 const { PostsApi } = require('./db-api');
-const { webClientBot, logger } = require('./utils');
+const { APP_NAME, webClientBot, logger } = require('./utils');
 const { generateInstallUrl } = require('./slack-installer');
 
 let divider = { type: 'divider' };
@@ -187,7 +187,7 @@ function askPermissionBlock(url) {
     "type": "section",
     "text": {
       "type": "mrkdwn",
-      "text": 'To start selling, Garage Sale needs permission to access your slack images.',
+      "text": `To start selling, ${APP_NAME} needs permission to access your slack images.`,
     },
     "accessory": {
       "type": "button",

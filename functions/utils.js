@@ -2,6 +2,8 @@ const functions = require('firebase-functions');
 const { WebClient } = require('@slack/web-api');
 const { db } = require('./db-api');
 
+const APP_NAME = 'Lemonade';
+
 const {
   token,
   user_token: userToken,
@@ -14,6 +16,7 @@ const webClientBot = new WebClient(token);
 const webClientUser = new WebClient(userToken);
 
 module.exports = {
+  APP_NAME,
   logger: functions.logger,
   db,
   webClientBot,
