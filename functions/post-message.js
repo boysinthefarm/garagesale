@@ -1,6 +1,6 @@
 const functions = require('firebase-functions');
 const { WebClient } = require('@slack/web-api');
-const { getMrkdwnBlock } = require('./block-kits');
+const { getMrkdwnBlock, askPermissionBlock } = require('./block-kits');
 
 const webClientBot = new WebClient(functions.config().slack.token);
 
