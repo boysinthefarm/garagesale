@@ -10,7 +10,7 @@ const {
   getMrkdwnBlock,
   askPermissionBlock,
 } = require('./block-kits');
-const { getMylistBlocks } = require('./mylist-handler');
+const { getMylistBlocks, getMyListHistoryBlocks } = require('./mylist-handler');
 const {
   postMessageSellInstruction,
   postMessageRequestPermission,
@@ -118,6 +118,7 @@ async function renderHomeTab(event) {
     ...await getMylistBlocks({ userId }),
     headerBlock('Your sold items :moneybag:'),
     divider,
+    ...await getMylistHistoryBlocks({ userId }),
   ];
 
   return webClientBot.views.publish({

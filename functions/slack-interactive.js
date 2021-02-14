@@ -3,7 +3,7 @@ const functions = require('firebase-functions');
 const { createMessageAdapter } = require('@slack/interactive-messages');
 const { db, logger, webClientBot } = require('./utils');
 const triggerSellModal = require('./trigger-sell-modal');
-const { getMylistBlocks } = require('./mylist-handler');
+const { getMylistBlocks, getMyListHistoryBlocks } = require('./mylist-handler');
 const { admin, PostsApi } = require('./db-api');
 const { getPostBlock, getMrkdwnBlock, listCommandBlock } = require('./block-kits');
 
