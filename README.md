@@ -1,5 +1,6 @@
 # Lemonade
 
+<img src="https://github.com/hyunwoo126/slack-garage-sale/blob/main/img/lemonade_logo.png" alt="lemonade" width="50"/>
 
 Lemonade is a marketplace on Slack that allows users to list, sell and buy items within a workspace. 
 
