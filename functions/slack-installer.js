@@ -57,25 +57,29 @@ const installer = new InstallProvider({
       return Promise.all(storePromises);
     },
     fetchInstallation: async (installQuery) => {
+      const installationId = '';
+
       if (installQuery.isEnterpriseInstall) {
         if (installQuery.enterpriseId !== undefined) {
-          // fetching org installation
-          return await db.collection('installations')
-            .doc(installQuery.enterpriseId).get();
+          // org installation
+          installationId = installQuery.enterpriseId;
         }
-      }
-      if (installQuery.teamId !== undefined) {
-        // fetching single team installation
-        return await db.collection('installations')
-          .doc(installQuery.teamId).get();
-      }
-
-      if (installQuery.userId) {
+      } else if (installQuery.teamId !== undefined) {
+        // single team installation
+        installationId = installQuery.teamId;
+      } else if (installQuery.userId) {
         const user = await db.collection('users')
           .doc(installQuery.userId).get();
-        return await db.collection('installations')
-          .doc(user.data().installationId);
+        installationId = user.data().installationId;
       }
+
+      if (installationId) {
+        // query installation
+        const doc = await db.collection('installations')
+          .doc(installationId).get();
+        return doc.data();
+      }
+
       throw new Error('Failed fetching installation');
     },
   }
