@@ -23,7 +23,7 @@ const getMylistBlocks = async ({ userId }) => {
     const buttons = myPostActionButtons(doc);
     blocks = blocks.concat(getPostBlock({
       ...doc.data(),
-      display_name: displayName,
+      display_name: 'You',
     }, buttons ? [buttons] : undefined));
   });
 
@@ -61,7 +61,7 @@ const getMyListHistoryBlocks = async ({userId }) => {
     const buttons = myPostActionButtons(doc);
     blocks = blocks.concat(getPostBlock({
       ...doc.data(),
-      display_name: displayName,
+      display_name: 'You',
     }, buttons ? [buttons] : undefined));
   });
 
