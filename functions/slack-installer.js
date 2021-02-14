@@ -105,7 +105,7 @@ function generateInstallUrl() {
   });
 };
 
-function postMessageSellInstruction(event) {
+async function postMessageSellInstruction(event) {
   const client = await botClientFactory({ userId: event.user });
   return client.chat.postMessage({
     channel: event.user,
