@@ -3,10 +3,7 @@ const admin = require('firebase-admin');
 const { WebClient } = require('@slack/web-api');
 const { InstallProvider } = require('@slack/oauth');
 const { postMessageSellInstruction } = require('./post-message');
-
-admin.initializeApp(functions.config().firebase);
-const db = admin.firestore();
-db.settings({ ignoreUndefinedProperties: true });
+const { admin, db } = require('./db-api');
 
 const {
   client_id: clientId,

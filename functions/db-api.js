@@ -66,5 +66,7 @@ class PostsApi {
 
 module.exports = {
   PostsApi,
+  db,
+  admin,
 };
 
