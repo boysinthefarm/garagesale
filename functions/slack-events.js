@@ -1,5 +1,6 @@
 const express = require('express');
 const functions = require('firebase-functions');
+const { WebClient } = require('@slack/web-api');
 const { logger, webClientBot, webClientUser } = require('./utils');
 const {
   listCommandBlock,
@@ -33,9 +34,9 @@ const getImagePublicLink = (image) => {
 
 // will make image public if not already
 // returns an array of public image urls or a promise that will return public image url
-const makeImagePublic = (image) => {
+const makeImagePublic = (image, webClient) => {
   if (!image.public_url_shared) {
-    return webClientUser.files.sharedPublicURL({ file: image.id })
+    return webClient.files.sharedPublicURL({ file: image.id })
       .catch((error) => {
         logger.log('----- sharedPublicURL error:', error);
         if (error.message === 'already_public') {
@@ -57,12 +58,30 @@ const makeImagePublic = (image) => {
   or false if sell flow is not triggered
  */
 async function triggerSellFlow(event) {
-  const { files } = event;
-  if (files) {
+  const { files, user } = event;
+
+  // no files
+  if (!files) { return false; }
+
+  const images = getImageFiles(files);
+  // no images
+  if (!images.length) { return false; }
+
+  let userRef = await db.collection('users').doc(user).get();
+  if (!userRef.exists) {
+    // trigger user oauth flow
+    return postMessageRequestPermission(event);
+  }
+
+  // if there are images and we have user auth token,
+  // then go ahead and trigger sell flow
+  if (images && userRef.exists) {
+    const webClient = new WebClient(userRef.data().token);
     // filter files for images
     // wait to make sure all of the urls have become public
-    const imageUrls = await Promise.all(getImageFiles(files).map(makeImagePublic));
-    logger.log('imageUrls:', imageUrls);
+    const imageUrls = await Promise.all(images.map((image) => {
+      return makeImagePublic(image, webClient);
+    }));
 
     // make blocks out of image urls
     const blocks = imageUrls.flatMap(sellThisItemBlock);
@@ -103,6 +122,14 @@ async function renderHomeTab(event) {
   });
 };
 
+// send a message to app "Messages" tab to ask user to give us permission
+async function postMessageRequestPermission(event) {
+  return webClientBot.chat.postMessage({
+    channel: event.user,
+    blocks: await askPermissionBlock(),
+  });
+};
+
 async function respondMessagesTab(event) {
   const blockIdPrefix = 'send_message_to_sell';
   const { channel, user } = event;
@@ -114,10 +141,7 @@ async function respondMessagesTab(event) {
   const { event_ts, messages: { blocks } } = lastMessage;
   // if it hasn't been sent already, send message about triggering sell flow
   if (!blocks || !blocks.find(block => block.block_id.includes(blockIdPrefix))) {
-    return webClientBot.chat.postMessage({
-      channel: user,
-      blocks: await askPermissionBlock({ blockId: `${blockIdPrefix}_${event_ts}` }),
-    });
+    return await postMessageRequestPermission(event);
   }
 
   return false;
