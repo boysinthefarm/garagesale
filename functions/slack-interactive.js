@@ -6,6 +6,7 @@ const triggerSellModal = require('./trigger-sell-modal');
 const { getMylistBlocks, getMyListHistoryBlocks } = require('./mylist-handler');
 const { admin, PostsApi } = require('./db-api');
 const { getPostBlock, getMrkdwnBlock, listCommandBlock } = require('./block-kits');
+const { botClientFactory } = require('./slack-installer');
 
 const slackInteractions = createMessageAdapter(functions.config().slack.signing_secret);
 
@@ -74,6 +75,7 @@ slackInteractions.action({ actionId: 'buy_message_seller' }, async (payload, res
 // user submits the modal to finish the sell item flow and create a post
 slackInteractions.viewSubmission('sell_modal', async (payload) => {
   logger.log('--- sell_modal ---', payload);
+  const { user: { id: userId } } = payload;
  
   // given a modal submission payload, return the image url
   const getImageUrl = (payload) => {
@@ -85,17 +87,42 @@ slackInteractions.viewSubmission('sell_modal', async (payload) => {
     return Object.assign(accum, current);
   }, {});
 
-  // insert new post to db
-  await db.collection('posts').add({
+  // the data that will go into db
+  const postData = {
     date_posted: admin.firestore.Timestamp.now(),
-    seller: payload.user.id,
+    seller: userId,
     team: payload.user.team_id,
     price: formData.price.value,
     title: formData.title.value,
     description: formData.description.value,
     image: getImageUrl(payload),
     sold: false,
+  };
+
+
+  // insert new post to db
+  await db.collection('posts').add(postData);
+
+  const client = await botClientFactory({
+    isEnterpriseInstall: payload.is_enterprise_install,
+    // enterpriseId: xxx
+    teamId: payload.team.id,
+    userId,
   });
+
+  const userInfo = await client.users.info({ user: userId });
+
+  client.chat.postMessage({
+    channel: userId,
+    text: 'Your item has been successfully posted :tada:',
+    blocks: [
+      getPostBlock({
+        ...postData,
+        display_name: userInfo.user.profile.display_name,
+      }),
+    ],
+  });
+
 });
 
 const slackInteractiveApp = express();
