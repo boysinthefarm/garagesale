@@ -155,7 +155,8 @@ async function respondMessagesTab(event) {
   const userRef = await db.collection('users').doc(user).get();
   const userToken = userRef.exists && userRef.data().token;
 
-  const { event_ts, messages: { blocks = [] } } = latestMessages;
+  const { messages: { blocks = [] } } = latestMessages;
+  logger.log('latest blocks', blocks);
   
   // we don't have user token and also we haven't asked for it recently
   if (!userToken && !findBlockIdIncludes(blocks, 'ask_permission')) {
