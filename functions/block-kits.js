@@ -183,6 +183,7 @@ const sellThisItemBlock = (imageUrl) => {
 async function askPermissionBlock() {
   const url = await generateInstallUrl();
   return [{
+    block_id: `ask_permission_${Date.now()}`,
     "type": "section",
     "text": {
       "type": "mrkdwn",

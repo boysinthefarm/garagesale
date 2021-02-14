@@ -7,6 +7,7 @@ const {
   sellThisItemBlock,
   divider,
   headerBlock,
+  getMrkdwnBlock,
   askPermissionBlock,
 } = require('./block-kits');
 const { getMylistBlocks } = require('./mylist-handler');
@@ -130,18 +131,42 @@ async function postMessageRequestPermission(event) {
   });
 };
 
+function postMessageSellInstruction(event) {
+  return webClientBot.chat.postMessage({
+    channel: event.user,
+    blocks: getMrkdwnBlock(
+      'Send a message here with an image attachment to start selling!',
+      { block_id: `sell_instruction_${Date.now()}` },
+    ),
+  });
+};
+
+function findBlockIdIncludes(blocks, includes) {
+  return blocks.find(block => block.block_id.includes(includes));
+};
+
 async function respondMessagesTab(event) {
-  const blockIdPrefix = 'send_message_to_sell';
   const { channel, user } = event;
-  const lastMessage = await webClientBot.conversations.history({
+  const latestMessages = await webClientBot.conversations.history({
     channel,
-    limit: 1,
+    limit: 5,
   });
 
-  const { event_ts, messages: { blocks } } = lastMessage;
-  // if it hasn't been sent already, send message about triggering sell flow
-  if (!blocks || !blocks.find(block => block.block_id.includes(blockIdPrefix))) {
+  const userRef = await db.collection('users').doc(user).get();
+  const userToken = userRef.exists && userRef.data().token;
+
+  const { event_ts, messages: { blocks = [] } } = latestMessages;
+  
+  // we don't have user token and also we haven't asked for it recently
+  if (!userToken && !findBlockIdIncludes(blocks, 'ask_permission')) {
+    // ask for user token
     return await postMessageRequestPermission(event);
+  }
+
+  // if we have user token and haven't posted sell instruction recently
+  if (userToken && !findBlockIdIncludes(blocks, 'sell_instruction')) {
+    // post sell instruction
+    return await postMessageSellInstruction(event);
   }
 
   return false;
