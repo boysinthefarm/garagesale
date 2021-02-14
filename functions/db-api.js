@@ -1,6 +1,10 @@
-const { db } = require('./utils');
+const functions = require('firebase-functions');
+const admin = require('firebase-admin');
 const { UnauthorizedError } = require('./exceptions');
  
+admin.initializeApp(functions.config().firebase);
+const db = admin.firestore();
+db.settings({ ignoreUndefinedProperties: true });
 
 class PostsApi {
   /*
