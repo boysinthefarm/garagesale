@@ -114,7 +114,7 @@ async function renderHomeTab(event) {
     headerBlock('Welcome :partying_face: \n Check out what your fellow coworkers are selling right now! :kite:'),
     divider,
     ...await listCommandBlock({ userId, teamId }),
-    headerBlock('Your Garage :abacus:'),
+    headerBlock('Your Lemonade Stand :lemon:'),
     ...await getMylistBlocks({ userId }),
   ];
 
