@@ -15,7 +15,8 @@ const getMylistBlocks = async ({ userId }) => {
   } = userInfo;
 
   const postsApi = new PostsApi({ userId,  teamId });
-  const posts = await postsApi.where('seller', '==', userId).get();
+  // get items that are not sold yet listed by the current user
+  const posts = await postsApi.where('seller', '==', userId).where('sold', '==', false).get();
 
   let blocks = [];
   posts.forEach(doc => {

@@ -111,11 +111,13 @@ async function renderHomeTab(event) {
   } = await webClientBot.users.info({ user: userId });
 
   const blocks = [
-    headerBlock('Welcome :partying_face: \n Check out what your fellow coworkers are selling right now! :kite:'),
+    headerBlock('Welcome :partying_face: \n Check out the items in the marketplace! :kite:'),
     divider,
     ...await listCommandBlock({ userId, teamId }),
     headerBlock('Your Lemonade Stand :lemon:'),
     ...await getMylistBlocks({ userId }),
+    headerBlock('Your sold items :moneybag:'),
+    divider,
   ];
 
   return webClientBot.views.publish({
