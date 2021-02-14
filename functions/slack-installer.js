@@ -62,7 +62,7 @@ const installer = new InstallProvider({
       teamId,
       userId,
     }) => {
-      const installationId = '';
+      let installationId = '';
 
       if (isEnterpriseInstall && enterpriseId) {
         // org installation
