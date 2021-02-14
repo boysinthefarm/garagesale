@@ -114,11 +114,13 @@ slackInteractions.viewSubmission('sell_modal', async (payload) => {
 
   client.chat.postMessage({
     channel: userId,
-    text: 'Your item has been successfully posted :tada:',
-    blocks: getPostBlock({
-      ...postData,
-      display_name: userInfo.user.profile.display_name,
-    }),
+    blocks: [
+      getMrkdwnBlock('Your item has been successfully posted :tada:'),
+      ...getPostBlock({
+        ...postData,
+        display_name: userInfo.user.profile.display_name,
+      }),
+    ],
   });
 
 });
