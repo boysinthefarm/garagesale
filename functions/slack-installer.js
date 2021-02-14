@@ -78,9 +78,9 @@ const installer = new InstallProvider({
 
       if (installationId) {
         // query installation
-        const doc = await db.collection('installations')
-          .doc(installationId).get();
-        return doc.data();
+        return db.collection('installations')
+          .doc(installationId).get()
+          .then(doc => doc.data());
       }
 
       throw new Error('Failed fetching installation');
