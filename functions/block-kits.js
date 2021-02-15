@@ -109,9 +109,9 @@ const getPostBlock = ({
   }
 
   return [
-    divider,
     ...currentPost,
     ...appendable,
+    divider,
   ];
 };
 
