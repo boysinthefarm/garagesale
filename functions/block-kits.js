@@ -124,7 +124,7 @@ const listCommandBlock = async ({
 
   const [posts, botClient] = await Promise.all([
     postsApi.where('sold', '==', false).where('seller', '!=', userId).getOrdered(),
-    botClient = await botClientFactory({ teamId }),
+    botClientFactory({ teamId }),
   ]);
 
   let blocks = [];
