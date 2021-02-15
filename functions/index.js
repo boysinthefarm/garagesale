@@ -1,16 +1,13 @@
 const functions = require('firebase-functions');
-const admin = require('firebase-admin');
 const express = require('express');
-const { installer } = require('./utils');
 const { generateInstallUrl } = require('./slack-installer');
-const app = express();
 
 const slackCommandHandler = require('./slack-command-handler');
 const slackEvents = require('./slack-events');
 const slackInteractive = require('./slack-interactive');
 const slackRedirect = require('./slack-redirect');
 
-
+const app = express();
 app.get('/', async(req, res) => {
   const url = await generateInstallUrl();
 
