@@ -38,18 +38,25 @@ slackInteractions.action({ actionId: 'buy_message_seller' }, async (payload, res
   const { user: { id: buyer, team_id: teamId } } = payload;
   const postsApi = new PostsApi({ userId: buyer, teamId });
 
+  const client = await botClientFactory({
+    isEnterpriseInstall: payload.is_enterprise_install,
+    // enterpriseId: xxx
+    teamId,
+    userId: buyer,
+  });
+
   // get the post the buyer is interested in
   const post = await postsApi.doc(payload.actions[0].value).get();
   const { seller } = post.data();
 
   // create a multi-party conversation among buyer, seller, and garage sale bot
-  const { channel: { id: channel } } = await webClientBot.conversations.open({
+  const { channel: { id: channel } } = await client.conversations.open({
     users: `${buyer},${seller}`,
   });
 
   // post a message in that multi-party conversation to notify the seller that
   // buyer is interested in the item
-  webClientBot.chat.postMessage({
+  await client.chat.postMessage({
     channel,
     blocks: [
       getMrkdwnBlock(`Hi <@${seller}> :wave: \n <@${buyer}> wants to buy your item!`),
@@ -58,14 +65,6 @@ slackInteractions.action({ actionId: 'buy_message_seller' }, async (payload, res
         display_name: 'You',
       }),
     ],
-  });
-
-  // replace the clicked button with a confirmation
-  respond({
-    replace_original: true,
-    blocks: await listCommandBlock({
-      userId: buyer, teamId, markAsBuyMessageSent: post.id,
-    }),
   });
 });
 
