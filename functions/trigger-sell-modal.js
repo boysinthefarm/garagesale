@@ -1,5 +1,4 @@
-const fetch = require('node-fetch');
-const functions = require('firebase-functions');
+const { botClientFactory } = require('./slack-installer');
 
 const makeModal = ({ imageUrl }) => {
   return {
@@ -9,7 +8,6 @@ const makeModal = ({ imageUrl }) => {
       "type": "plain_text",
       "text": "Sell",
       "emoji": true
-                    
     },
     "submit": {
       "type": "plain_text",
@@ -68,17 +66,11 @@ const makeModal = ({ imageUrl }) => {
   }
 };
 
-const triggerSellModal = (trigger_id, modalData) => {
-  return fetch('https://slack.com/api/views.open', {
-    method: 'post',
-    body: JSON.stringify({
-      trigger_id,
-      view: makeModal(modalData),
-    }),
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${functions.config().slack.token}`,
-    },
+const triggerSellModal = ({ trigger_id, user: { team_id: teamId }}, modalData) => {
+  const client = await botClientFactory({ teamId });
+  return client.views.open({
+    trigger_id,
+    view: makeModal(modalData),
   });
 };
 

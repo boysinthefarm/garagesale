@@ -18,7 +18,7 @@ slackInteractions.action({ actionId: 'sell_this_item' }, (payload, respond) => {
   logger.log('--- sell_this_item ----', payload);
   const imageUrl = payload.actions[0].value;
 
-  triggerSellModal(payload.trigger_id, { imageUrl });
+  triggerSellModal(payload, { imageUrl });
 });
 
 slackInteractions.action({ actionId: 'mark_as_sold' }, async (payload, respond) => {

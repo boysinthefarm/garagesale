@@ -1,5 +1,3 @@
-const fetch = require('node-fetch');
-const triggerSellModal = require('./trigger-sell-modal');
 const { mylistHandler } = require('./mylist-handler');
 const { listCommandBlock } = require('./block-kits');
 const { logger } = require('./utils');
@@ -35,10 +33,6 @@ module.exports = async (req, res) => {
       blocks,
     });
 
-  } else if (req.body.text === 'sell') {
-    const resOpenModal = await triggerSellModal();
-    const json = await resOpenModal.json();
-    res.sendStatus(200);
   } else if (req.body.text === 'mylist') {
     mylistHandler(req, res);
   } else {
