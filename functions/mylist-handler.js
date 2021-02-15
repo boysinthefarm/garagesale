@@ -1,10 +1,11 @@
-const { db, webClientBot } = require('./utils');
+const { db } = require('./utils');
 const { getPostBlock, myPostActionButtons } = require('./block-kits');
 const { PostsApi } = require('./db-api');
+const { botClientFactory } = require('./slack-installer');
 
 const getMylistBlocks = async ({ userId }) => {
-  // these two requests should be parallel
-  const userInfo = await webClientBot.users.info({ user: userId });
+  const client = await botClientFactory({ userId });
+  const userInfo = await client.users.info({ user: userId });
   const {
     user: {
       team_id: teamId,
@@ -45,7 +46,8 @@ const mylistHandler = async (req, res) => {
 
 
 const getMyListHistoryBlocks = async ({userId }) => {
-  const userInfo = await webClientBot.users.info({user : userId});
+  const client = await botClientFactory({ userId });
+  const userInfo = await client.users.info({user : userId});
   const {
     user: {
       team_id: teamId,
