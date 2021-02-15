@@ -46,22 +46,14 @@ slackInteractions.action({ actionId: 'buy_message_seller' }, async (payload, res
 
   const postsApi = new PostsApi({ userId: buyer, teamId });
 
-  logger.log('postApi initialized');
-
-  logger.log('postId', payload.actions[0].value);
-
   // get the post the buyer is interested in
   const post = await postsApi.doc(payload.actions[0].value).get();
   const { seller } = post.data();
-
-  logger.log(`buyer: ${buyer} seller: ${seller}`);
 
   // create a multi-party conversation among buyer, seller, and garage sale bot
   const { channel: { id: channel } } = await client.conversations.open({
     users: `${buyer},${seller}`,
   });
-
-  logger.log('channel created:', channel);
 
   // post a message in that multi-party conversation to notify the seller that
   // buyer is interested in the item

@@ -30,7 +30,6 @@ class PostsApi {
   }
 
   reset() {
-    functions.logger.log('reset');
     // by default, every query will filter by team
     this.currentRef = this.collection
       .where('team', '==', this.teamId);
