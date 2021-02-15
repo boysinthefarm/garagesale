@@ -4,8 +4,15 @@ const { PostsApi } = require('./db-api');
 const { botClientFactory } = require('./slack-installer');
 
 const getMylistBlocks = async ({ userId }) => {
+  const postsApi = new PostsApi({ userId,  teamId });
   const client = await botClientFactory({ userId });
-  const userInfo = await client.users.info({ user: userId });
+
+  const [posts, userInfo] = await Promise.all([
+    // get items that are not sold yet listed by the current user
+    postsApi.where('seller', '==', userId).where('sold', '==', false).getOrdered(),
+    client.users.info({ user: userId }),
+  ]);
+
   const {
     user: {
       team_id: teamId,
@@ -14,13 +21,6 @@ const getMylistBlocks = async ({ userId }) => {
       },
     },
   } = userInfo;
-
-  const postsApi = new PostsApi({ userId,  teamId });
-  // get items that are not sold yet listed by the current user
-  const posts = await postsApi
-    .where('seller', '==', userId)
-    .where('sold', '==', false)
-    .getOrdered();
 
   let blocks = [];
   posts.forEach(doc => {
