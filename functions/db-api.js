@@ -31,8 +31,10 @@ class PostsApi {
 
   reset() {
     // by default, every query will filter by team
+    // sorted by date
     this.currentRef = this.collection
-      .where('team', '==', this.teamId);
+      .where('team', '==', this.teamId)
+      .orderBy('date_posted', 'desc');
     return this;
   }
 
