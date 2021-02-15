@@ -30,8 +30,10 @@ class PostsApi {
   }
 
   reset() {
+    functions.logger.log('reset');
     // by default, every query will filter by team
     this.currentRef = this.collection
+      .orderBy('date_posted', 'desc')
       .where('team', '==', this.teamId);
     return this;
   }
@@ -47,7 +49,7 @@ class PostsApi {
   }
 
   get() {
-    return this.currentRef.orderBy('date_posted', 'desc').get();
+    return this.currentRef.get();
   }
 
   doc(postId) {

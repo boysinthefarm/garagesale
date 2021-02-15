@@ -46,6 +46,10 @@ slackInteractions.action({ actionId: 'buy_message_seller' }, async (payload, res
 
   const postsApi = new PostsApi({ userId: buyer, teamId });
 
+  logger.log('postApi initialized');
+
+  logger.log('postId', payload.actions[0].value);
+
   // get the post the buyer is interested in
   const post = await postsApi.doc(payload.actions[0].value).get();
   const { seller } = post.data();
