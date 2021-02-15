@@ -115,7 +115,7 @@ async function respondMessagesTab(event) {
   let botClient; 
   try {
     botClient = await botClientFactory({ userId: user });
-  } catch() {
+  } catch(e) {
     return await postMessageRequestPermission(event);
   }
 
