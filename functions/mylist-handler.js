@@ -16,7 +16,10 @@ const getMylistBlocks = async ({ userId }) => {
 
   const postsApi = new PostsApi({ userId,  teamId });
   // get items that are not sold yet listed by the current user
-  const posts = await postsApi.where('seller', '==', userId).where('sold', '==', false).get();
+  const posts = await postsApi
+    .where('seller', '==', userId)
+    .where('sold', '==', false)
+    .getOrdered();
 
   let blocks = [];
   posts.forEach(doc => {
@@ -54,7 +57,10 @@ const getMyListHistoryBlocks = async ({userId }) => {
 
   const postsApi = new PostsApi({ userId,  teamId });
   // get items that are sold by the current user (sell history)
-  const posts = await postsApi.where('seller', '==', userId).where('sold', '==', true).get();
+  const posts = await postsApi
+    .where('seller', '==', userId)
+    .where('sold', '==', true)
+    .getOrdered();
 
   let blocks = [];
   posts.forEach(doc => {

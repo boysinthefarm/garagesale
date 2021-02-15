@@ -121,7 +121,7 @@ const listCommandBlock = async ({
   markAsBuyMessageSent = '', // postId
 }) => {
   const postsApi = new PostsApi({ userId, teamId });
-  const posts = await postsApi.where('sold', '==', false).where('seller', '!=', userId).get();
+  const posts = await postsApi.where('sold', '==', false).where('seller', '!=', userId).ordered();
 
   let blocks = [];
   const userInfoPromises = [];
