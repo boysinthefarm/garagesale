@@ -112,7 +112,7 @@ function findBlockIdIncludes(blocks, includes) {
 async function respondMessagesTab(event) {
   const { channel, user } = event;
 
-  const botClient; 
+  let botClient; 
   try {
     botClient = await botClientFactory({ userId: user });
   } catch() {
