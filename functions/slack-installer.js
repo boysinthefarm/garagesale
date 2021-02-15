@@ -3,7 +3,7 @@ const { InstallProvider } = require('@slack/oauth');
 const { WebClient } = require('@slack/web-api');
 const { db } = require('./db-api');
 const { getMrkdwnBlock, askPermissionBlock } = require('./block-kits');
-const { logger, webClientBot } = require('./utils');
+const { logger } = require('./utils');
 
 const {
   client_id: clientId,
@@ -125,7 +125,8 @@ async function postMessageSellInstruction(event) {
 
 // send a message to app "Messages" tab to ask user to give us permission
 async function postMessageRequestPermission(event) {
-  return webClientBot.chat.postMessage({
+  const client = await botClientFactory({ userId: event.user });
+  return client.chat.postMessage({
     channel: event.user,
     blocks: askPermissionBlock(await generateInstallUrl()),
   });
