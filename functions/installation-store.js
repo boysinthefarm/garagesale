@@ -53,9 +53,10 @@ module.exports = {
       // single team installation
       installationId = teamId;
     } else if (userId) {
-      const user = await db.collection('users')
-        .doc(userId).get();
-      installationId = user.data().installationId;
+      const user = await db.collection('users').doc(userId).get();
+      if (user.exists) {
+        installationId = user.data().installationId;
+      }
     }
 
     if (installationId) {

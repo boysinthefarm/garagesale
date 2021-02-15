@@ -112,11 +112,14 @@ function findBlockIdIncludes(blocks, includes) {
 async function respondMessagesTab(event) {
   const { channel, user } = event;
 
-  const [botClient, userRef] = await Promise.all([
-    botClientFactory({ userId: user }),
-    // query for this user
-    db.collection('users').doc(user).get(),
-  ]);
+  const botClient; 
+  try {
+    botClient = await botClientFactory({ userId: user });
+  } catch() {
+    return await postMessageRequestPermission(event);
+  }
+
+  const userRef = db.collection('users').doc(user).get();
 
   // query latest messages
   const { messages } = await botClient.conversations.history({ channel, limit: 5 });
