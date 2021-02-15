@@ -9,11 +9,11 @@ const {
   getMrkdwnBlock,
   askPermissionBlock,
 } = require('./block-kits');
+const { botClientFactory } = require('./slack-installer');
 const {
-  botClientFactory,
   postMessageSellInstruction,
   postMessageRequestPermission,
-} = require('./slack-installer');
+} = require('./post-message');
 const { renderHomeTab } = require('./home-tab');
 
 const { createEventAdapter } = require('@slack/events-api');

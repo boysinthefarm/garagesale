@@ -1,9 +1,8 @@
 const functions = require('firebase-functions');
 const { InstallProvider } = require('@slack/oauth');
 const { WebClient } = require('@slack/web-api');
-const { db } = require('./db-api');
-const { getMrkdwnBlock, askPermissionBlock } = require('./block-kits');
 const { logger } = require('./utils');
+const installationStore = require('./installation-store');
 
 const {
   client_id: clientId,
@@ -16,76 +15,7 @@ const installer = new InstallProvider({
   clientId,
   clientSecret,
   stateSecret,
-  installationStore: {
-    storeInstallation: async (installation) => {
-      logger.log('installation', installation);
-      const storePromises = [];
-
-      let installationId = '';
-      if (installation.isEnterpriseInstall) {
-        // storing org installation
-        installationId = installation.enterprise.id;
-      } else if (installation.team !== null && installation.team.id !== undefined) {
-        // storing single team installation
-        installationId = installation.team.id;
-      }
-
-      if (installationId) {
-        storePromises.push(
-          db.collection('installations')
-          .doc(installationId)
-          .set(installation, {merge: true})
-        );
-      }
-
-      if (installation.user && installation.user.id) {
-        // store user token separately
-        storePromises.push(
-          db.collection('users')
-          .doc(installation.user.id)
-          .set({
-            installationId,
-            ...installation.user,
-          }, {merge: true})
-          .then(() => {
-            // let the user know that he can start selling
-            postMessageSellInstruction({ user: installation.user.id });
-          })
-        );
-      }
-
-      return Promise.all(storePromises);
-    },
-    fetchInstallation: async ({
-      isEnterpriseInstall,
-      enterpriseId,
-      teamId,
-      userId,
-    }) => {
-      let installationId = '';
-
-      if (isEnterpriseInstall && enterpriseId) {
-        // org installation
-        installationId = enterpriseId;
-      } else if (teamId !== undefined) {
-        // single team installation
-        installationId = teamId;
-      } else if (userId) {
-        const user = await db.collection('users')
-          .doc(userId).get();
-        installationId = user.data().installationId;
-      }
-
-      if (installationId) {
-        // query installation
-        return db.collection('installations')
-          .doc(installationId).get()
-          .then(doc => doc.data());
-      }
-
-      throw new Error('Failed fetching installation');
-    },
-  }
+  installationStore,
 });
 
 async function botClientFactory(query) {
@@ -112,31 +42,9 @@ function generateInstallUrl() {
   });
 };
 
-async function postMessageSellInstruction(event) {
-  const client = await botClientFactory({ userId: event.user });
-  return client.chat.postMessage({
-    channel: event.user,
-    blocks: [getMrkdwnBlock(
-      'Send a message here with an image attachment to start selling!',
-      { block_id: `sell_instruction_${Date.now()}` },
-    )],
-  });
-};
-
-// send a message to app "Messages" tab to ask user to give us permission
-async function postMessageRequestPermission(event) {
-  const client = await botClientFactory({ userId: event.user });
-  return client.chat.postMessage({
-    channel: event.user,
-    blocks: askPermissionBlock(await generateInstallUrl()),
-  });
-};
-
 module.exports = {
   installer,
   botClientFactory,
   generateInstallUrl,
-  postMessageSellInstruction,
-  postMessageRequestPermission,
 };
 
