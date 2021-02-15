@@ -1,4 +1,5 @@
 const {
+  divider,
   headerBlock,
   listCommandBlock,
 } = require('./block-kits');
