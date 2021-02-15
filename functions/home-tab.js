@@ -21,7 +21,7 @@ async function renderHomeTab(event) {
     ...await listCommandBlock({ userId, teamId }),
     divider,
     headerBlock('Your Lemonade Stand :lemon:'),
-    ...await getMylistBlocks({ userId }),
+    ...await getMylistBlocks({ userId, teamId }),
     divider,
     headerBlock('Your Sold Items :moneybag:'),
     ...await getMyListHistoryBlocks({ userId }),

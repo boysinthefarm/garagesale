@@ -2,9 +2,9 @@ const { getPostBlock, myPostActionButtons, getMrkdwnBlock } = require('./block-k
 const { db, PostsApi } = require('./db-api');
 const { botClientFactory } = require('./slack-installer');
 
-const getMylistBlocks = async ({ userId }) => {
+const getMylistBlocks = async ({ userId, teamId }) => {
   const postsApi = new PostsApi({ userId,  teamId });
-  const client = await botClientFactory({ userId });
+  const client = await botClientFactory({ teamId, userId });
 
   const [posts, userInfo] = await Promise.all([
     // get items that are not sold yet listed by the current user
