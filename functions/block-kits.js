@@ -109,9 +109,9 @@ const getPostBlock = ({
   }
 
   return [
+    divider,
     ...currentPost,
     ...appendable,
-    divider,
   ];
 };
 
@@ -129,6 +129,11 @@ const listCommandBlock = async ({
 
   let blocks = [];
   const userInfoPromises = [];
+
+  // handle empty state
+  if (posts.empty) {
+    return [getMrkdwnBlock('There are currently no items available for sale. Please comet back later!')];
+  }
 
   posts.forEach(doc => {
     userInfoPromises.push(new Promise(async (resolve) => {
@@ -156,10 +161,6 @@ const listCommandBlock = async ({
     }));
   });
 
-  // handle empty state
-  if (blocks == []) {
-    blocks = [getMrkdwnBlock('There are currently no items available for sale. Please comet back later!')];
-  }
 
   await Promise.all(userInfoPromises);
 

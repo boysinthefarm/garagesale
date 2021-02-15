@@ -21,6 +21,12 @@ const getMylistBlocks = async ({ userId, teamId }) => {
   } = userInfo;
 
   let blocks = [];
+
+  // handle empty state
+  if (posts.empty) {
+    return [getMrkdwnBlock('You have not listed any items! Please refer to Message or About tab for any guidance.')];
+  }
+
   posts.forEach(doc => {
     const buttons = myPostActionButtons(doc);
     blocks = blocks.concat(getPostBlock({
@@ -29,10 +35,6 @@ const getMylistBlocks = async ({ userId, teamId }) => {
     }, buttons ? [buttons] : undefined));
   });
 
-  // handle empty state
-  if (blocks == []) {
-    blocks = [getMrkdwnBlock('You have not listed any items! Please refer to Message or About tab for any guidance.')];
-  }
   return blocks;
 };
 
@@ -67,6 +69,12 @@ const getMyListHistoryBlocks = async ({userId }) => {
     .getOrdered();
 
   let blocks = [];
+
+  // handle empty state
+  if (posts.empty) {
+    return [getMrkdwnBlock('Once you mark an item as sold, it will appear here!')];
+  }
+
   posts.forEach(doc => {
     const buttons = myPostActionButtons(doc);
     blocks = blocks.concat(getPostBlock({
@@ -74,10 +82,7 @@ const getMyListHistoryBlocks = async ({userId }) => {
       display_name: 'You',
     }, buttons ? [buttons] : undefined));
   });
-  // handle empty state
-  if (blocks == []) {
-    blocks = [getMrkdwnBlock('Once you mark an item as sold, it will appear here!')];
-  }
+  
   return blocks;
 };
 

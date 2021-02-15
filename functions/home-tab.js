@@ -19,10 +19,8 @@ async function renderHomeTab(event) {
   const blocks = [
     headerBlock('Welcome :partying_face: \n Check out the items in the marketplace! :kite:'),
     ...await listCommandBlock({ userId, teamId }),
-    divider,
     headerBlock('Your Lemonade Stand :lemon:'),
     ...await getMylistBlocks({ userId, teamId }),
-    divider,
     headerBlock('Your Sold Items :moneybag:'),
     ...await getMyListHistoryBlocks({ userId }),
   ];
