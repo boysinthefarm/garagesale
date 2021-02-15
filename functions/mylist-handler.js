@@ -1,4 +1,4 @@
-const { getPostBlock, myPostActionButtons } = require('./block-kits');
+const { getPostBlock, myPostActionButtons, getMrkdwnBlock } = require('./block-kits');
 const { db, PostsApi } = require('./db-api');
 const { botClientFactory } = require('./slack-installer');
 
@@ -30,6 +30,10 @@ const getMylistBlocks = async ({ userId }) => {
     }, buttons ? [buttons] : undefined));
   });
 
+  // handle empty state
+  if (blocks == []) {
+    blocks = [getMrkdwnBlock('You have not listed any items! Please refer to Message or About tab for any guidance.')];
+  }
   return blocks;
 };
 
@@ -71,7 +75,10 @@ const getMyListHistoryBlocks = async ({userId }) => {
       display_name: 'You',
     }, buttons ? [buttons] : undefined));
   });
-
+  // handle empty state
+  if (blocks == []) {
+    blocks = [getMrkdwnBlock('Once you mark an item as sold, it will appear here!')];
+  }
   return blocks;
 };
 
