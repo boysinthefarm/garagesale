@@ -1,7 +1,7 @@
 const express = require('express');
 const functions = require('firebase-functions');
 const { createMessageAdapter } = require('@slack/interactive-messages');
-const { db, logger, webClientBot } = require('./utils');
+const { db, logger } = require('./utils');
 const triggerSellModal = require('./trigger-sell-modal');
 const { getMylistBlocks, getMyListHistoryBlocks } = require('./mylist-handler');
 const { admin, PostsApi } = require('./db-api');
@@ -43,8 +43,6 @@ slackInteractions.action({ actionId: 'buy_message_seller' }, async (payload, res
     teamId,
     userId: buyer,
   });
-
-  logger.log('botClientFactory');
 
   const postsApi = new PostsApi({ userId: buyer, teamId });
 
