@@ -1,6 +1,7 @@
 const functions = require('firebase-functions');
 const express = require('express');
 const { generateInstallUrl } = require('./slack-installer');
+const { APP_NAME } = require('./utils');
 
 const slackCommandHandler = require('./slack-command-handler');
 const slackEvents = require('./slack-events');
@@ -13,7 +14,7 @@ app.get('/', async(req, res) => {
   const url = await generateInstallUrl();
 
   res.send(`<html><body>
-    <h1>slack-garage-sale</h1>
+    <h1>${APP_NAME}</h1>
     <a href="${url}">${imgAddToSlack}</a>
   </body></html>`);
 });
