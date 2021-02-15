@@ -1,7 +1,7 @@
 const express = require('express');
 const functions = require('firebase-functions');
 const { WebClient } = require('@slack/web-api');
-const { logger, db, webClientBot } = require('./utils');
+const { logger, db } = require('./utils');
 const {
   sellThisItemBlock,
   divider,
@@ -9,6 +9,7 @@ const {
   askPermissionBlock,
 } = require('./block-kits');
 const {
+  botClientFactory,
   postMessageSellInstruction,
   postMessageRequestPermission,
 } = require('./slack-installer');
@@ -79,17 +80,18 @@ async function triggerSellFlow(event) {
   // if there are images and we have user auth token,
   // then go ahead and trigger sell flow
   if (images && userRef.exists) {
-    const webClient = new WebClient(userRef.data().token);
+    const userClient = new WebClient(userRef.data().token);
     // filter files for images
     // wait to make sure all of the urls have become public
     const imageUrls = await Promise.all(images.map((image) => {
-      return makeImagePublic(image, webClient);
+      return makeImagePublic(image, userClient);
     }));
 
     // make blocks out of image urls
     const blocks = imageUrls.flatMap(sellThisItemBlock);
-
-    return webClientBot.chat.postEphemeral({
+    
+    const botClient = await botClientFactory({ userId: user });
+    return botClient.chat.postEphemeral({
       channel: event.channel,
       user: event.user,
       blocks,
@@ -109,12 +111,15 @@ function findBlockIdIncludes(blocks, includes) {
 async function respondMessagesTab(event) {
   const { channel, user } = event;
 
-  const [{ messages }, userRef] = await Promise.all([
-    // query latest messages
-    webClientBot.conversations.history({ channel, limit: 5 }),
+  const [botClient, userRef] = await Promise.all([
+    botClientFactory({ userId: user }),
     // query for this user
     db.collection('users').doc(user).get(),
   ]);
+
+  // query latest messages
+  const { messages } = await botClient.conversations.history({ channel, limit: 5 });
+
   const blocks = messages.flatMap((message) => message.blocks);
   const userToken = userRef.exists && userRef.data().token;
 
