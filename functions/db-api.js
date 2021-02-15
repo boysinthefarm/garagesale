@@ -38,6 +38,11 @@ class PostsApi {
 
   where(...params) {
     this.currentRef = this.currentRef.where(...params);
+
+    // add dummy orderBy for '!=' because...firebase
+    if (params[1] === '!=') {
+      this.currentRef = this.currentRef.orderBy(params[0]);
+    }
     return this;
   }
 
