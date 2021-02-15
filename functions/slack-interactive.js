@@ -14,11 +14,11 @@ const slackInteractions = createMessageAdapter(functions.config().slack.signing_
 slackInteractions.action({ actionId: 'give_permission' }, () => {});
 
 // handler for when user clicks on the button to "Sell This Item!"
-slackInteractions.action({ actionId: 'sell_this_item' }, (payload, respond) => {
+slackInteractions.action({ actionId: 'sell_this_item' }, async (payload, respond) => {
   logger.log('--- sell_this_item ----', payload);
   const imageUrl = payload.actions[0].value;
 
-  triggerSellModal(payload, { imageUrl });
+  await triggerSellModal(payload, { imageUrl });
 });
 
 slackInteractions.action({ actionId: 'mark_as_sold' }, async (payload, respond) => {
