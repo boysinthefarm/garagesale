@@ -32,7 +32,7 @@ const getMylistBlocks = async ({ userId }) => {
 
   // handle empty state
   if (blocks == []) {
-    blocks.concat(getMrkdwnBlock('You have not listed any items! Please refer to Message or About tab for any guidance.'));
+    blocks = [getMrkdwnBlock('You have not listed any items! Please refer to Message or About tab for any guidance.')];
   }
   return blocks;
 };
@@ -77,7 +77,7 @@ const getMyListHistoryBlocks = async ({userId }) => {
   });
   // handle empty state
   if (blocks == []) {
-    blocks.concat(getMrkdwnBlock('Once you mark an item as sold, it will appear here!'));
+    blocks = [getMrkdwnBlock('Once you mark an item as sold, it will appear here!')];
   }
   return blocks;
 };

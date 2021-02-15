@@ -158,7 +158,7 @@ const listCommandBlock = async ({
 
   // handle empty state
   if (blocks == []) {
-    blocks.concat(getMrkdwnBlock('There are currently no items available for sale. Please comet back later!'));
+    blocks = [getMrkdwnBlock('There are currently no items available for sale. Please comet back later!')];
   }
 
   await Promise.all(userInfoPromises);
