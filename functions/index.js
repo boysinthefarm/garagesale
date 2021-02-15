@@ -27,3 +27,7 @@ exports.slackInteractive = functions.https.onRequest(slackInteractive);
 exports.slackCommand = functions.https.onRequest(slackCommandHandler);
 
 exports.slackRedirect = functions.https.onRequest(slackRedirect);
+
+exports.helloPubSub = functions.pubsub.topic('hello').onPublish((message) => {
+  functions.logger.log('---- helloPubSub ----', message);
+});
