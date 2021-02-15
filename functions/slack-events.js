@@ -112,20 +112,19 @@ function findBlockIdIncludes(blocks, includes) {
 async function respondMessagesTab(event) {
   const { channel, user } = event;
 
-  let botClient; 
-  try {
-    botClient = await botClientFactory({ userId: user });
-  } catch(e) {
+  const userRef = await db.collection('users').doc(user).get();
+  const userToken = userRef.exists && userRef.data().token;
+
+  if (!userToken) {
+    // ask for permission to get user token
     return await postMessageRequestPermission(event);
   }
 
-  const userRef = db.collection('users').doc(user).get();
-
+  const botClient = await botClientFactory({ userId: user });
   // query latest messages
   const { messages } = await botClient.conversations.history({ channel, limit: 5 });
 
   const blocks = messages.flatMap((message) => message.blocks);
-  const userToken = userRef.exists && userRef.data().token;
 
   // we don't have user token and also we haven't asked for it recently
   if (!userToken && !findBlockIdIncludes(blocks, 'ask_permission')) {
