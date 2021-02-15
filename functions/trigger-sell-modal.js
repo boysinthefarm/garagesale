@@ -66,7 +66,10 @@ const makeModal = ({ imageUrl }) => {
   }
 };
 
-const triggerSellModal = ({ trigger_id, user: { team_id: teamId }}, modalData) => {
+const triggerSellModal = async (
+  { trigger_id, user: { team_id: teamId }},
+  modalData,
+) => {
   const client = await botClientFactory({ teamId });
   return client.views.open({
     trigger_id,
