@@ -10,3 +10,13 @@ Users can upload an item's name, picture, and price, and Lemonade will list them
 
 Any user in the workspace may request to buy your item, or ask for more pictures. Once marked as sold, the item will 
 no longer appear in the list, but will always be available in your history. 
+
+----
+
+## Running firebase locally
+```
+cd functions
+# save firebase functions configuration into .runtimeconfig.json
+firebase functions:config:get > .runtimeconfig.json
+firebase serve --only functions,hosting
+```
