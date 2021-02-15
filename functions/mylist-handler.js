@@ -75,7 +75,10 @@ const getMyListHistoryBlocks = async ({userId }) => {
       display_name: 'You',
     }, buttons ? [buttons] : undefined));
   });
-
+  // handle empty state
+  if (blocks == []) {
+    blocks.concat(getMrkdwnBlock('Once you mark an item as sold, it will appear here!'));
+  }
   return blocks;
 };
 
