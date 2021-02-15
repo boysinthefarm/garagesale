@@ -36,7 +36,6 @@ slackInteractions.action({ actionId: 'buy_message_seller' }, async (payload, res
   logger.log('--- buy_message_seller ---', payload);
 
   const { user: { id: buyer, team_id: teamId } } = payload;
-  const postsApi = new PostsApi({ userId: buyer, teamId });
 
   const client = await botClientFactory({
     isEnterpriseInstall: payload.is_enterprise_install,
@@ -44,6 +43,10 @@ slackInteractions.action({ actionId: 'buy_message_seller' }, async (payload, res
     teamId,
     userId: buyer,
   });
+
+  logger.log('botClientFactory');
+
+  const postsApi = new PostsApi({ userId: buyer, teamId });
 
   // get the post the buyer is interested in
   const post = await postsApi.doc(payload.actions[0].value).get();
