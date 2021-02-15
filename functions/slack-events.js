@@ -3,18 +3,16 @@ const functions = require('firebase-functions');
 const { WebClient } = require('@slack/web-api');
 const { logger, db, webClientBot, webClientUser } = require('./utils');
 const {
-  listCommandBlock,
   sellThisItemBlock,
   divider,
-  headerBlock,
   getMrkdwnBlock,
   askPermissionBlock,
 } = require('./block-kits');
-const { getMylistBlocks, getMyListHistoryBlocks } = require('./mylist-handler');
 const {
   postMessageSellInstruction,
   postMessageRequestPermission,
 } = require('./slack-installer');
+const { renderHomeTab } = require('./home-tab');
 
 const { createEventAdapter } = require('@slack/events-api');
 const slackEvents = createEventAdapter(functions.config().slack.signing_secret);
@@ -100,33 +98,6 @@ async function triggerSellFlow(event) {
 
   // sell flow not triggered
   return false;
-};
-
-async function renderHomeTab(event) {
-  const { user: userId } = event;
-  const {
-    user: {
-      team_id: teamId,
-    }
-  } = await webClientBot.users.info({ user: userId });
-
-  const blocks = [
-    headerBlock('Welcome :partying_face: \n Check out the items in the marketplace! :kite:'),
-    divider,
-    ...await listCommandBlock({ userId, teamId }),
-    headerBlock('Your Lemonade Stand :lemon:'),
-    ...await getMylistBlocks({ userId }),
-    headerBlock('Your sold items :moneybag:'),
-    ...await getMyListHistoryBlocks({ userId }),
-  ];
-
-  return webClientBot.views.publish({
-    user_id: userId,
-    view: {
-      type: 'home',
-      blocks,
-    },
-  });
 };
 
 function findBlockIdIncludes(blocks, includes) {

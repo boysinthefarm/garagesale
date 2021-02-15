@@ -6,6 +6,7 @@ const triggerSellModal = require('./trigger-sell-modal');
 const { getMylistBlocks, getMyListHistoryBlocks } = require('./mylist-handler');
 const { admin, PostsApi } = require('./db-api');
 const { getPostBlock, getMrkdwnBlock, listCommandBlock } = require('./block-kits');
+const { renderHomeTab } = require('./home-tab');
 const { botClientFactory } = require('./slack-installer');
 
 const slackInteractions = createMessageAdapter(functions.config().slack.signing_secret);
@@ -27,6 +28,8 @@ slackInteractions.action({ actionId: 'mark_as_sold' }, async (payload, respond) 
 
   const postsApi = new PostsApi({ userId: user.id, teamId: user.team_id });
   await postsApi.doc(postId).update({ sold: true });
+
+  renderHomeTab({ user: user.id });
 });
 
 slackInteractions.action({ actionId: 'buy_message_seller' }, async (payload, respond) => {
