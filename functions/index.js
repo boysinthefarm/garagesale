@@ -9,8 +9,8 @@ const slackInteractive = require('./slack-interactive');
 const slackRedirect = require('./slack-redirect');
 
 const imgAddToSlack = '<img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcSet="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" />';
-const app = express();
-app.get('/', async(req, res) => {
+const web = express();
+web.get('/', async(req, res) => {
   const url = await generateInstallUrl();
 
   res.send(`<html><body>
@@ -18,7 +18,7 @@ app.get('/', async(req, res) => {
     <a href="${url}">${imgAddToSlack}</a>
   </body></html>`);
 });
-exports.app = functions.https.onRequest(app);
+exports.web = functions.https.onRequest(web);
 
 exports.slackBot = functions.https.onRequest(slackEvents);
 
