@@ -131,7 +131,7 @@ async function respondMessagesTab(event) {
   return false;
 };
 
-slackEvents.on('app_home_opened', (event) => {
+slackEvents.on('app_home_opened', async (event) => {
   logger.log('-- app_home_opened ---', event);
   /* example event
     {
@@ -144,9 +144,9 @@ slackEvents.on('app_home_opened', (event) => {
   */
   const { tab } = event;
   if (tab === 'home') {
-    renderHomeTab(event);
+    await renderHomeTab(event);
   } else if (tab === 'messages') {
-    respondMessagesTab(event);
+    await respondMessagesTab(event);
   }
 });
 
