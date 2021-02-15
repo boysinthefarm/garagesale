@@ -1,6 +1,5 @@
-const { db } = require('./utils');
 const { getPostBlock, myPostActionButtons } = require('./block-kits');
-const { PostsApi } = require('./db-api');
+const { db, PostsApi } = require('./db-api');
 const { botClientFactory } = require('./slack-installer');
 
 const getMylistBlocks = async ({ userId }) => {

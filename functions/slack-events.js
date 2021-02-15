@@ -1,7 +1,8 @@
 const express = require('express');
 const functions = require('firebase-functions');
 const { WebClient } = require('@slack/web-api');
-const { logger, db } = require('./utils');
+const { logger } = require('./utils');
+const { db } = require('./db-api');
 const {
   sellThisItemBlock,
   divider,

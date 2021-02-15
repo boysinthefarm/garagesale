@@ -1,10 +1,10 @@
 const express = require('express');
 const functions = require('firebase-functions');
 const { createMessageAdapter } = require('@slack/interactive-messages');
-const { db, logger } = require('./utils');
+const { logger } = require('./utils');
 const triggerSellModal = require('./trigger-sell-modal');
 const { getMylistBlocks, getMyListHistoryBlocks } = require('./mylist-handler');
-const { admin, PostsApi } = require('./db-api');
+const { db, admin, PostsApi } = require('./db-api');
 const { getPostBlock, getMrkdwnBlock, listCommandBlock } = require('./block-kits');
 const { renderHomeTab } = require('./home-tab');
 const { botClientFactory } = require('./slack-installer');
