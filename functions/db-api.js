@@ -40,7 +40,8 @@ class PostsApi {
   where(...params) {
     this.currentRef = this.currentRef.where(...params);
 
-    // add dummy orderBy for '!=' because...firebase
+    // firestore will error out when we do orderBy date later
+    // without this dummy orderBy for inequality
     if (params[1] === '!=') {
       this.currentRef = this.currentRef.orderBy(params[0]);
     }
