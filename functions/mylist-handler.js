@@ -14,7 +14,6 @@ const getMylistBlocks = async ({ userId, teamId }) => {
 
   const {
     user: {
-      team_id: teamId,
       profile: {
         display_name: displayName,
       },
@@ -39,7 +38,7 @@ const getMylistBlocks = async ({ userId, teamId }) => {
 
 
 const mylistHandler = async (req, res) => {
-  const { user_id: userId, team_id: teamId  } = req.body;
+  const { user_id: userId, team_id: teamId } = req.body;
   const blocks = await getMylistBlocks({ userId, teamId });
   res.send({
     response_type: 'in_channel',
