@@ -1,7 +1,6 @@
 const functions = require('firebase-functions');
 const { InstallProvider } = require('@slack/oauth');
 const { WebClient } = require('@slack/web-api');
-const { logger } = require('./utils');
 const installationStore = require('./installation-store');
 
 const {

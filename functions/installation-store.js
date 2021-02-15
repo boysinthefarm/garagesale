@@ -1,5 +1,4 @@
 const { db } = require('./db-api');
-const { postMessageSellInstruction } = require('./post-message');
 
 module.exports = {
   storeInstallation: async (installation) => {
@@ -33,7 +32,6 @@ module.exports = {
         }, {merge: true})
         .then(() => {
           // let the user know that he can start selling
-          postMessageSellInstruction({ user: installation.user.id });
         })
       );
     }

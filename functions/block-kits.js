@@ -188,7 +188,7 @@ const sellThisItemBlock = (imageUrl) => {
   });
 
   return blocks;
-}
+};
 
 function askPermissionBlock(url) {
   return [{
