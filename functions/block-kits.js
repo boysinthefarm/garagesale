@@ -4,8 +4,8 @@
   
 const commaNumber = require('comma-number');
 const { PostsApi } = require('./db-api');
-const { APP_NAME, webClientBot, logger } = require('./utils');
-const { generateInstallUrl } = require('./slack-installer');
+const { APP_NAME, logger } = require('./utils');
+const { generateInstallUrl, botClientFactory } = require('./slack-installer');
 
 let divider = { type: 'divider' };
 
@@ -121,7 +121,11 @@ const listCommandBlock = async ({
   markAsBuyMessageSent = '', // postId
 }) => {
   const postsApi = new PostsApi({ userId, teamId });
-  const posts = await postsApi.where('sold', '==', false).where('seller', '!=', userId).getOrdered();
+
+  const [posts, botClient] = await Promise.all([
+    postsApi.where('sold', '==', false).where('seller', '!=', userId).getOrdered(),
+    botClient = await botClientFactory({ teamId }),
+  ]);
 
   let blocks = [];
   const userInfoPromises = [];
@@ -129,7 +133,7 @@ const listCommandBlock = async ({
   posts.forEach(doc => {
     userInfoPromises.push(new Promise(async (resolve) => {
       const { title, price, seller, description, date_posted, sold, image } = doc.data();
-      const userInfo = await webClientBot.users.info({ user: seller });
+      const userInfo = await botClient.users.info({ user: seller });
 
       let appendable = [];
       if (markAsBuyMessageSent === doc.id) {
