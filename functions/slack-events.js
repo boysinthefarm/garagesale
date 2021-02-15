@@ -101,7 +101,9 @@ async function triggerSellFlow(event) {
 };
 
 function findBlockIdIncludes(blocks, includes) {
-  return blocks.find(block => block.block_id.includes(includes));
+  return blocks.find((block) => {
+    return block && block.block_id && block.block_id.includes(includes);
+  });
 };
 
 async function respondMessagesTab(event) {
