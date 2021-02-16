@@ -17,7 +17,7 @@ async function postMessageSellInstruction(auth) {
 async function postMessageRequestPermission(auth) {
   const client = await botClientFactory(auth);
   logger.log('postMessageRequestPermission', auth);
-  return client.chat.postMessage({
+  return await client.chat.postMessage({
     channel: auth.userId,
     blocks: askPermissionBlock(await generateInstallUrl()),
   });
