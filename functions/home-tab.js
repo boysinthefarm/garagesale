@@ -6,15 +6,9 @@ const {
 const { getMylistBlocks, getMyListHistoryBlocks } = require('./mylist-handler');
 const { botClientFactory } = require('./slack-installer');
 
-async function renderHomeTab(event) {
-  const { user: userId } = event;
-
-  const client = await botClientFactory({ userId });
-  const {
-    user: {
-      team_id: teamId,
-    }
-  } = await client.users.info({ user: userId });
+async function renderHomeTab(auth) {
+  const client = await botClientFactory(auth);
+  const { userId, teamId } = auth;
 
   const blocks = [
     headerBlock('Welcome :partying_face: \n Check out the items in the marketplace! :kite:'),
