@@ -30,7 +30,7 @@ function getAuthFromEventBody(body) {
   const auth = body.authorizations[0];
   return {
     teamId: body.team_id,
-    userId: body.event.user_id,
+    userId: body.event.user,
     isEnterpriseInstall: auth.is_enterprise_install,
     enterpriseId: auth.enterprise_id,
   };
