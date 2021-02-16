@@ -178,7 +178,7 @@ slackEvents.on('app_home_opened', async (event, body) => {
   if (tab === 'home') {
     return await renderHomeTab(auth);
   } else if (tab === 'messages') {
-    return await respondMessagesTab(auth);
+    return await respondMessagesTab(event, auth);
   }
 });
 
