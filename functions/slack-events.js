@@ -108,7 +108,7 @@ async function triggerSellFlow(event, auth) {
     // make blocks out of image urls
     const blocks = imageUrls.flatMap(sellThisItemBlock);
     
-    const botClient = await botClientFactory({ userId: user });
+    const botClient = await botClientFactory(auth);
     return botClient.chat.postEphemeral({
       channel: event.channel,
       user: event.user,
