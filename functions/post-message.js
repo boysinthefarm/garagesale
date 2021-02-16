@@ -1,5 +1,6 @@
 const { botClientFactory, generateInstallUrl } = require('./slack-installer');
 const { getMrkdwnBlock, askPermissionBlock } = require('./block-kits');
+const { logger } = require('./utils');
 
 async function postMessageSellInstruction(auth) {
   const client = await botClientFactory(auth);
@@ -15,6 +16,7 @@ async function postMessageSellInstruction(auth) {
 // send a message to app "Messages" tab to ask user to give us permission
 async function postMessageRequestPermission(auth) {
   const client = await botClientFactory(auth);
+  logger.log('postMessageRequestPermission', auth);
   return client.chat.postMessage({
     channel: auth.userId,
     blocks: askPermissionBlock(await generateInstallUrl()),
