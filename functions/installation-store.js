@@ -71,7 +71,7 @@ module.exports = {
         .then(doc => doc.data());
     }
 
-    throw new Error('Failed fetching installation');
+    throw new Error('Failed retrieving installation');
   },
 };
 

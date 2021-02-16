@@ -18,6 +18,7 @@ const installer = new InstallProvider({
 });
 
 async function botClientFactory(query) {
+  functions.logger.log('botClientFactory', query);
   const installation = await installer.authorize(query);
   return new WebClient(installation.botToken);
 };
