@@ -19,7 +19,7 @@ async function renderHomeTab(auth) {
     ...await getMylistBlocks({ userId, teamId }),
     headerBlock('Your Sold Items :moneybag:'),
     divider,
-    ...await getMyListHistoryBlocks({ userId }),
+    ...await getMyListHistoryBlocks({ userId, teamId }),
   ];
 
   return client.views.publish({

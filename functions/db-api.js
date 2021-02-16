@@ -31,8 +31,7 @@ class PostsApi {
 
   reset() {
     // by default, every query will filter by team
-    this.currentRef = this.collection
-      .where('team', '==', this.teamId);
+    this.currentRef = this.collection.where('team', '==', this.teamId);
     return this;
   }
 

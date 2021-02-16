@@ -37,8 +37,8 @@ const mylistHandler = async (req, res) => {
 };
 
 
-const getMyListHistoryBlocks = async (auth) => {
-  const postsApi = new PostsApi(auth);
+const getMyListHistoryBlocks = async ({ userId, teamId }) => {
+  const postsApi = new PostsApi({ userId, teamId });
   // get items that are sold by the current user (sell history)
   const posts = await postsApi
     .where('seller', '==', userId)
