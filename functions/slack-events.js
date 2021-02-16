@@ -17,7 +17,10 @@ const {
 const { renderHomeTab } = require('./home-tab');
 
 const { createEventAdapter } = require('@slack/events-api');
-const slackEvents = createEventAdapter(functions.config().slack.signing_secret);
+const slackEvents = createEventAdapter(
+  functions.config().slack.signing_secret,
+  { includeBody: true },
+);
 
 // files: event.files
 const getImageFiles = (files) => {
@@ -141,8 +144,10 @@ async function respondMessagesTab(event) {
   return false;
 };
 
-slackEvents.on('app_home_opened', async (event) => {
+slackEvents.on('app_home_opened', async (event, body, headers) => {
   logger.log('-- app_home_opened ---', event);
+  logger.log('body', body);
+  logger.log('header', header);
   /* example event
     {
       "type":"app_home_opened",
