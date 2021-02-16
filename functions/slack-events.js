@@ -159,10 +159,9 @@ async function respondMessagesTab(event, auth) {
   return false;
 };
 
-slackEvents.on('app_home_opened', async (event, body, headers) => {
+slackEvents.on('app_home_opened', async (event, body) => {
   logger.log('-- app_home_opened ---', event);
   logger.log('body', body);
-  logger.log('headers', headers);
   /* example event
     {
       "type":"app_home_opened",
@@ -173,6 +172,7 @@ slackEvents.on('app_home_opened', async (event, body, headers) => {
     }
   */
   const auth = getAuthFromEventBody(body);
+  logger.log('---auth---', auth);
 
   const { tab } = event;
   if (tab === 'home') {
