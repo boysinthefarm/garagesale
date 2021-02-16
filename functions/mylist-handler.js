@@ -1,24 +1,12 @@
 const { getPostBlock, myPostActionButtons, getMrkdwnBlock } = require('./block-kits');
 const { db, PostsApi } = require('./db-api');
-const { botClientFactory } = require('./slack-installer');
 
 const getMylistBlocks = async ({ userId, teamId }) => {
   const postsApi = new PostsApi({ userId,  teamId });
-  const client = await botClientFactory({ teamId, userId });
-
-  const [posts, userInfo] = await Promise.all([
-    // get items that are not sold yet listed by the current user
-    postsApi.where('seller', '==', userId).where('sold', '==', false).getOrdered(),
-    client.users.info({ user: userId }),
-  ]);
-
-  const {
-    user: {
-      profile: {
-        display_name: displayName,
-      },
-    },
-  } = userInfo;
+  const posts = await postsApi
+    .where('seller', '==', userId)
+    .where('sold', '==', false)
+    .getOrdered();
 
   let blocks = [];
 
@@ -50,7 +38,6 @@ const mylistHandler = async (req, res) => {
 
 
 const getMyListHistoryBlocks = async (auth) => {
-  const client = await botClientFactory(auth);
   const postsApi = new PostsApi(auth);
   // get items that are sold by the current user (sell history)
   const posts = await postsApi
