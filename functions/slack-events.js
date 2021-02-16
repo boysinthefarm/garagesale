@@ -22,19 +22,17 @@ const slackEvents = createEventAdapter(
   { includeBody: true },
 );
 
+/*
+ * converts slack authorization prop of slack event body to camelCase
+ * param {body} event body https://slack.dev/node-slack-sdk/events-api
+ */
 function getAuthFromEventBody(body) {
-  const {
-    team_id: teamId,
-    is_enterprise_install: isEnterpriseInstall,
-    enterprise_id: enterpriseId,
-    user_id: userId,
-  } = body.authorization;
-
+  const auth = body.authorization;
   return {
-    teamId,
-    isEnterpriseInstall,
-    enterpriseId,
-    userId,
+    teamId: auth.team_id,
+    isEnterpriseInstall: auth.is_enterprise_install,
+    enterpriseId: auth.enterprise_id,
+    userId: auth.user_id,
   };
 };
 
