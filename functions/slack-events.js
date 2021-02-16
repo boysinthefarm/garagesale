@@ -172,7 +172,6 @@ slackEvents.on('app_home_opened', async (event, body) => {
     }
   */
   const auth = getAuthFromEventBody(body);
-  logger.log('---auth---', auth);
 
   const { tab } = event;
   if (tab === 'home') {

@@ -1,4 +1,3 @@
-const { logger } = require('./utils');
 const { db } = require('./db-api');
 
 module.exports = {
@@ -45,8 +44,6 @@ module.exports = {
     teamId,
     userId,
   }) => {
-    logger.log('teamId:', teamId);
-    logger.log('userId:', userId);
     let installationId = '';
 
     if (isEnterpriseInstall && enterpriseId) {
@@ -61,8 +58,6 @@ module.exports = {
         installationId = user.data().installationId;
       }
     }
-
-    logger.log('installationId', installationId);
 
     if (installationId) {
       // query installation
