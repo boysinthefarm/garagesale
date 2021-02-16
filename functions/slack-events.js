@@ -29,10 +29,10 @@ const slackEvents = createEventAdapter(
 function getAuthFromEventBody(body) {
   const auth = body.authorizations[0];
   return {
-    teamId: auth.team_id,
+    teamId: body.team_id,
+    userId: body.user_id,
     isEnterpriseInstall: auth.is_enterprise_install,
     enterpriseId: auth.enterprise_id,
-    userId: auth.user_id,
   };
 };
 
