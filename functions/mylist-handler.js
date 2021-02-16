@@ -49,19 +49,9 @@ const mylistHandler = async (req, res) => {
 };
 
 
-const getMyListHistoryBlocks = async ({userId }) => {
-  const client = await botClientFactory({ userId });
-  const userInfo = await client.users.info({user : userId});
-  const {
-    user: {
-      team_id: teamId,
-      profile: {
-        display_name: displayName,
-      },
-    },
-  } = userInfo;
-
-  const postsApi = new PostsApi({ userId,  teamId });
+const getMyListHistoryBlocks = async (auth) => {
+  const client = await botClientFactory(auth);
+  const postsApi = new PostsApi(auth);
   // get items that are sold by the current user (sell history)
   const posts = await postsApi
     .where('seller', '==', userId)
