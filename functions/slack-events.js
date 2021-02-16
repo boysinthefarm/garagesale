@@ -210,7 +210,7 @@ slackEvents.on('message', (event, body) => {
   }
   */
   const auth = getAuthFromEventBody(body);
-  triggerSellFlow(event, body);
+  triggerSellFlow(event, auth);
 });
 
 const slackEventsApp = express();
