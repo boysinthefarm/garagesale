@@ -29,7 +29,7 @@ slackInteractions.action({ actionId: 'mark_as_sold' }, async (payload, respond) 
   const postsApi = new PostsApi({ userId: user.id, teamId: user.team_id });
   await postsApi.doc(postId).update({ sold: true });
 
-  await renderHomeTab({ user: user.id });
+  await renderHomeTab({ teamId: user.team_id, userId: user.id });
 });
 
 slackInteractions.action({ actionId: 'buy_message_seller' }, async (payload, respond) => {
