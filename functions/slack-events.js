@@ -27,7 +27,7 @@ const slackEvents = createEventAdapter(
  * param {body} event body https://slack.dev/node-slack-sdk/events-api
  */
 function getAuthFromEventBody(body) {
-  const auth = body.authorization[0];
+  const auth = body.authorizations[0];
   return {
     teamId: auth.team_id,
     isEnterpriseInstall: auth.is_enterprise_install,
