@@ -15,7 +15,6 @@ web.get('/', async(req, res) => {
   const pubsubClient = new PubSub();
   await pubsubClient
     .topic('hello')
-    .publisher()
     .publish(Buffer.from('pubsub from sky'));
 
   const url = await generateInstallUrl();
