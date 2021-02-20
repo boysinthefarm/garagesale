@@ -8,5 +8,5 @@ const TOPIC = {
 exports.TOPIC = TOPIC;
 
 exports.helloPubSub = pubsub.topic('hello').onPublish((message) => {
-  logger.log('---- helloPubSub ----', message);
+  logger.log('---- helloPubSub ----', message.json);
 });

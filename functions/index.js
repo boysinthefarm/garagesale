@@ -17,7 +17,7 @@ web.get('/', async(req, res) => {
   const pubsubClient = new PubSub();
   await pubsubClient
     .topic(TOPIC.HELLO)
-    .publish(Buffer.from('pubsub from sky refactor'));
+    .publish(Buffer.from(JSON.stringify({ sky: 'sky is here' })));
 
   const url = await generateInstallUrl();
 
