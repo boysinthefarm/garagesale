@@ -4,7 +4,8 @@ const { PubSub } = require('@google-cloud/pubsub');
 const { generateInstallUrl } = require('./slack-installer');
 const { APP_NAME } = require('./utils');
 
-const { TOPIC, helloPubSub } = require('./pub-sub');
+const TOPIC = require('./pub-sub/topic');
+const { helloPubSub } = require('./pub-sub/handlers');
 
 const slackCommandHandler = require('./slack-command-handler');
 const slackEvents = require('./slack-events');
@@ -17,7 +18,7 @@ web.get('/', async(req, res) => {
   const pubsubClient = new PubSub();
   await pubsubClient
     .topic(TOPIC.HELLO)
-    .publish(Buffer.from(JSON.stringify({ sky: 'sky is here' })));
+    .publish(Buffer.from(JSON.stringify({ sky: 'pub-sub dir' })));
 
   const url = await generateInstallUrl();
 
