@@ -4,6 +4,8 @@ const { PubSub } = require('@google-cloud/pubsub');
 const { generateInstallUrl } = require('./slack-installer');
 const { APP_NAME } = require('./utils');
 
+const { TOPIC, helloPubSub } = require('./pub-sub');
+
 const slackCommandHandler = require('./slack-command-handler');
 const slackEvents = require('./slack-events');
 const slackInteractive = require('./slack-interactive');
@@ -14,8 +16,8 @@ const web = express();
 web.get('/', async(req, res) => {
   const pubsubClient = new PubSub();
   await pubsubClient
-    .topic('hello')
-    .publish(Buffer.from('pubsub from sky'));
+    .topic(TOPIC.HELLO)
+    .publish(Buffer.from('pubsub from sky refactor'));
 
   const url = await generateInstallUrl();
 
@@ -34,6 +36,4 @@ exports.slackCommand = functions.https.onRequest(slackCommandHandler);
 
 exports.slackRedirect = functions.https.onRequest(slackRedirect);
 
-exports.helloPubSub = functions.pubsub.topic('hello').onPublish((message) => {
-  functions.logger.log('---- helloPubSub ----', message);
-});
+exports.helloPubSub = helloPubSub;
