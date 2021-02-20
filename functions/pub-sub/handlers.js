@@ -4,7 +4,7 @@ const { logger } = require('./../utils');
 
 const pubsub = functions.pubsub;
 
-exports.helloPubSub = pubsub.topic(TOPIC.hello).onPublish((message) => {
+exports.helloPubSub = pubsub.topic(TOPIC.HELLO).onPublish((message) => {
   logger.log('---- helloPubSub ----', message.json);
   return null;
 });
