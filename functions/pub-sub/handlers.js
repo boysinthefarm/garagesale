@@ -5,11 +5,6 @@ const { logger } = require('./../utils');
 
 const pubsub = functions.pubsub;
 
-exports.helloPubSub = pubsub.topic(TOPIC.HELLO).onPublish((message) => {
-  logger.log('---- helloPubSub ----', message.json);
-  return null;
-});
-
 exports.messageEveryone = pubsub.topic(TOPIC.MESSAGE_EVERYONE).onPublish(async(message) => {
   const { teamId, data } = message.json;
   if (!teamId || typeof data !== 'object') {
