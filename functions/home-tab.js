@@ -11,17 +11,20 @@ async function renderHomeTab(auth) {
   const client = await botClientFactory(auth);
   const { userId, teamId } = auth;
 
-  const blocks = await Promise.all([
+  let blocks = await Promise.all([
     headerBlock('Welcome :partying_face: \n Check out the items in the marketplace! :kite:'),
     divider,
-    listCommandBlock({ userId, teamId }).then(block => ...block),
+    listCommandBlock({ userId, teamId }),
     headerBlock('Your Lemonade Stand :lemon:'),
     divider,
-    getMylistBlocks({ userId, teamId }).then(block => ...block),
+    getMylistBlocks({ userId, teamId }),
     headerBlock('Your Sold Items :moneybag:'),
     divider,
-    getMyListHistoryBlocks({ userId, teamId }).then(block => ...block),
+    getMyListHistoryBlocks({ userId, teamId }),
   ]);
+
+  // need to remove nesting on some of the elements
+  blocks = blocks.flat();
 
   logger.log('renderHomeTab blocks', blocks);
 
