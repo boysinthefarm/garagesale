@@ -126,7 +126,7 @@ slackInteractions.viewSubmission('sell_modal', async (payload) => {
   // message everyone in the team about the new post
   publishJSON(TOPIC.MESSAGE_EVERYONE, {
     teamId: payload.team.id,
-    data: { blocks },
+    data: { blocks: postBlock },
   });
 });
 

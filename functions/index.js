@@ -5,7 +5,7 @@ const { generateInstallUrl } = require('./slack-installer');
 const { APP_NAME } = require('./utils');
 
 const TOPIC = require('./pub-sub/topic');
-const { helloPubSub } = require('./pub-sub/handlers');
+const { helloPubSub, messageEveryone } = require('./pub-sub/handlers');
 
 const slackCommandHandler = require('./slack-command-handler');
 const slackEvents = require('./slack-events');
@@ -38,3 +38,4 @@ exports.slackCommand = functions.https.onRequest(slackCommandHandler);
 exports.slackRedirect = functions.https.onRequest(slackRedirect);
 
 exports.helloPubSub = helloPubSub;
+exports.messageEveryone = messageEveryone;
