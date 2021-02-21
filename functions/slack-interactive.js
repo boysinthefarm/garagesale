@@ -8,6 +8,8 @@ const { db, admin, PostsApi } = require('./db-api');
 const { getPostBlock, getMrkdwnBlock, listCommandBlock } = require('./block-kits');
 const { renderHomeTab } = require('./home-tab');
 const { botClientFactory } = require('./slack-installer');
+const TOPIC = require('./pub-sub/topic');
+const { publishJSON } = require('./pub-sub/client'); 
 
 const slackInteractions = createMessageAdapter(functions.config().slack.signing_secret);
 
@@ -108,18 +110,24 @@ slackInteractions.viewSubmission('sell_modal', async (payload) => {
   });
 
   const userInfo = await client.users.info({ user: userId });
+  const postBlock = getPostBlock({
+    ...postData,
+    display_name: userInfo.user.profile.display_name,
+  });
 
   client.chat.postMessage({
     channel: userId,
     blocks: [
       getMrkdwnBlock('Your item has been successfully posted :tada:'),
-      ...getPostBlock({
-        ...postData,
-        display_name: userInfo.user.profile.display_name,
-      }),
+      ...postBlock,
     ],
   });
 
+  // message everyone in the team about the new post
+  publishJSON(TOPIC.MESSAGE_EVERYONE, {
+    teamId: payload.team.id,
+    data: { blocks },
+  });
 });
 
 const slackInteractiveApp = express();

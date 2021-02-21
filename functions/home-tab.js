@@ -26,8 +26,6 @@ async function renderHomeTab(auth) {
   // need to remove nesting on some of the elements
   blocks = blocks.flat();
 
-  logger.log('renderHomeTab blocks', blocks);
-
   return client.views.publish({
     user_id: userId,
     view: {
