@@ -10,7 +10,7 @@ exports.helloPubSub = pubsub.topic(TOPIC.HELLO).onPublish((message) => {
   return null;
 });
 
-exports.messageEveryone = pubsub.topic(TOPIC.MESSAGE_EVERYONE).onPublish((message) => {
+exports.messageEveryone = pubsub.topic(TOPIC.MESSAGE_EVERYONE).onPublish(async(message) => {
   const { teamId, data } = message.json;
   if (!teamId || typeof data === 'object') {
     logger.error('this message failed:', message);
