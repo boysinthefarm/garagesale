@@ -10,17 +10,17 @@ async function renderHomeTab(auth) {
   const client = await botClientFactory(auth);
   const { userId, teamId } = auth;
 
-  const blocks = [
+  const blocks = await Promise.all([
     headerBlock('Welcome :partying_face: \n Check out the items in the marketplace! :kite:'),
     divider,
-    ...await listCommandBlock({ userId, teamId }),
+    listCommandBlock({ userId, teamId }),
     headerBlock('Your Lemonade Stand :lemon:'),
     divider,
-    ...await getMylistBlocks({ userId, teamId }),
+    getMylistBlocks({ userId, teamId }),
     headerBlock('Your Sold Items :moneybag:'),
     divider,
-    ...await getMyListHistoryBlocks({ userId, teamId }),
-  ];
+    getMyListHistoryBlocks({ userId, teamId }),
+  ]);
 
   return client.views.publish({
     user_id: userId,
