@@ -132,7 +132,7 @@ const listCommandBlock = async ({
 
   // handle empty state
   if (posts.empty) {
-    return [getMrkdwnBlock('There are currently no items available for sale. Please comet back later!')];
+    return [getMrkdwnBlock('There are currently no items available for sale. Please come back later!')];
   }
 
   posts.forEach(doc => {
