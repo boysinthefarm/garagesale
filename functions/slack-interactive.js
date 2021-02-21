@@ -117,10 +117,7 @@ slackInteractions.viewSubmission('sell_modal', async (payload) => {
 
   client.chat.postMessage({
     channel: userId,
-    blocks: [
-      getMrkdwnBlock('Your item has been successfully posted :tada:'),
-      ...postBlock,
-    ],
+    text: 'Your item has been successfully posted :tada:',
   });
 
   // message everyone in the team about the new post
