@@ -31,5 +31,4 @@ exports.slackCommand = functions.https.onRequest(slackCommandHandler);
 
 exports.slackRedirect = functions.https.onRequest(slackRedirect);
 
-exports.helloPubSub = helloPubSub;
 exports.messageEveryone = messageEveryone;
