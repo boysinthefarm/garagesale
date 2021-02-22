@@ -19,13 +19,6 @@ web.engine('hbs', engines.handlebars);
 web.set('views', './views');
 web.set('view engine', 'hbs');
 
-web.get('/', async(req, res) => {
-  res.render('index', {
-    installUrl: await installUrl,
-    APP_NAME,
-    partials: { imgAddToSlack: 'partials/img-add-to-slack' },
-  });
-});
 
 exports.web = functions.https.onRequest(web);
 
