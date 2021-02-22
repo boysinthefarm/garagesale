@@ -108,3 +108,6 @@ dist
 
 # firebase admin SDK private key
 service-account-key.json
+
+
+.DS_Store
