@@ -29,7 +29,10 @@ web.get('/', async(req, res) => {
 
 exports.web = functions.https.onRequest(web);
 
-exports.slackBot = functions.https.onRequest(slackEvents);
+// use this handler when registering a new endpoint with slack
+const handleSlackChallenge = (req, res) => res.send({ challenge: req.body.challenge });
+
+exports.slackEvents = functions.https.onRequest(slackEvents);
 
 exports.slackInteractive = functions.https.onRequest(slackInteractive);
 
