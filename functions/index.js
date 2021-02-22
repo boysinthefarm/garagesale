@@ -23,7 +23,6 @@ web.get('/', async(req, res) => {
   res.render('index', {
     installUrl: await installUrl,
     APP_NAME,
-    partials: { imgAddToSlack: 'partials/img-add-to-slack' },
   });
 });
 
