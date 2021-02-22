@@ -1,0 +1,14 @@
+body {
+    text-align: center;
+}
+
+h1 {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    height: 50px;
+}
