@@ -15,8 +15,9 @@ exports.messageEveryone = pubsub.topic(TOPIC.MESSAGE_EVERYONE).onPublish(async(m
 
   const client = await botClientFactory({ teamId });
   const { members } = await client.users.list({ team_id: teamId });
+  const nonBotMembers = members.filter(member => !member.is_bot);
 
-  return Promise.all(members.map((member) => {
+  return Promise.all(nonBotMembers.map((member) => {
     return client.chat.postMessage({
       channel: member.id,
       ...data,
@@ -33,10 +34,11 @@ exports.publishHomeTab = pubsub.topic(TOPIC.PUBLISH_HOME_TAB).onPublish(async(me
 
   const client = await botClientFactory({ teamId });
   const { members } = await client.users.list({ team_id: teamId });
+  const nonBotMembers = members.filter(member => !member.is_bot);
 
-  logger.log('publishHomeTab', teamId, members.map(member => member.id));
+  logger.log('publishHomeTab', teamId, nonBotMembers.map(member => member.id));
 
-  return Promise.all(members.map((member) => {
+  return Promise.all(nonBotMembers.map((member) => {
     return renderHomeTab({
       teamId,
       userId: member.id,
