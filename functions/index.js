@@ -5,7 +5,10 @@ const engines = require('consolidate');
 const { generateInstallUrl } = require('./slack-installer');
 const { APP_NAME } = require('./utils');
 
-const { messageEveryone } = require('./pub-sub/handlers');
+const {
+  messageEveryone,
+  publishHomeTab,
+} = require('./pub-sub/handlers');
 
 const slackCommandHandler = require('./slack-command-handler');
 const slackEvents = require('./slack-events');
@@ -40,3 +43,6 @@ exports.slackCommand = functions.https.onRequest(slackCommandHandler);
 exports.slackRedirect = functions.https.onRequest(slackRedirect);
 
 exports.messageEveryone = messageEveryone;
+
+exports.publishHomeTab = publishHomeTab;
+

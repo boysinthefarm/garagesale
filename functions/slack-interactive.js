@@ -31,7 +31,8 @@ slackInteractions.action({ actionId: 'mark_as_sold' }, async (payload, respond) 
   const postsApi = new PostsApi({ userId: user.id, teamId: user.team_id });
   await postsApi.doc(postId).update({ sold: true });
 
-  await renderHomeTab({ teamId: user.team_id, userId: user.id });
+  // update everyone's home tab
+  publishJSON(TOPIC.PUBLISH_HOME_TAB, { teamId: user.team_id });
 });
 
 slackInteractions.action({ actionId: 'buy_message_seller' }, async (payload, respond) => {
@@ -101,6 +102,9 @@ slackInteractions.viewSubmission('sell_modal', async (payload) => {
 
   // insert new post to db
   await db.collection('posts').add(postData);
+
+  // update everyone's home tab
+  publishJSON(TOPIC.PUBLISH_HOME_TAB, { teamId: payload.user.team_id });
 
   const client = await botClientFactory({
     isEnterpriseInstall: payload.is_enterprise_install,
