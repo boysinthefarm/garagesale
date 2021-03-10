@@ -2,7 +2,6 @@ const functions = require('firebase-functions');
 const TOPIC = require('./topic');
 const { botClientFactory } = require('./../slack-installer');
 const { logger } = require('./../utils');
-const { botClientFactory } = require('../slack-installer');
 const { renderHomeTab } = require('../home-tab');
 
 const pubsub = functions.pubsub;
