@@ -214,8 +214,13 @@ function askPermissionBlock(url) {
 };
 
 async function settingsBlock(userId) {
+  let newItemNotificationDisabled = false;
   const userDoc = await db.collection('users').doc(userId).get();
-  const { newItemNotificationDisabled = false } = userDoc.data();
+  if (userDoc.exists) {
+    const userData = userDoc.data();
+    newItemNotificationDisabled = userData.newItemNotificationDisabled || false;
+  }
+
   const newItemNotificationBlock = {
     type: 'section',
     text: {
