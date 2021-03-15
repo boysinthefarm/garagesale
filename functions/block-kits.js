@@ -50,7 +50,7 @@ const listPostActionButtons = (doc) => {
         "type": "button",
         "text": {
           "type": "plain_text",
-          "text": "View Image",
+          "text": ":mag: View Image",
           "emoji": true
         },
         "value": doc.data().image,
