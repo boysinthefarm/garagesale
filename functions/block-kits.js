@@ -191,7 +191,7 @@ const sellThisItemBlock = (imageUrl) => {
   return blocks;
 };
 
-async function askPermissionBlock(url) {
+function askPermissionBlock(url) {
   return [{
     block_id: `ask_permission_${Date.now()}`,
     "type": "section",
@@ -213,7 +213,7 @@ async function askPermissionBlock(url) {
   }];
 };
 
-function settingsBlock(userId) {
+async function settingsBlock(userId) {
   const userDoc = await db.collection('users').doc(userId).get();
   const { newItemNotificationDisabled = false } = userDoc.data();
   const newItemNotificationBlock = {
