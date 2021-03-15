@@ -134,6 +134,18 @@ slackInteractions.viewSubmission('sell_modal', async (payload) => {
   });
 });
 
+slackInteractions.action({ actionId: 'disable_new_item_notification' }, async (payload, respond) => {
+  logger.log('--- disable_new_item_notification ----', payload);
+  const { user: { id: userId } } = payload;
+  const { value } = payload.actions[0];
+  await db.collection('users').doc(userId).set({
+    newItemNotificationDisabled: value === 'disable',
+  }, { merge: true });
+
+  // update user's home tab
+  publishJSON(TOPIC.PUBLISH_HOME_TAB, { teamId: user.team_id, userId });
+});
+
 const slackInteractiveApp = express();
 slackInteractiveApp.use('/', slackInteractions.expressMiddleware());
 
