@@ -221,7 +221,7 @@ async function settingsBlock(userId) {
     newItemNotificationDisabled = userData.newItemNotificationDisabled || false;
   }
 
-  const newItemNotificationBlock = {
+  const newItemNotificationSection = {
     type: 'section',
     text: {
       type: 'mrkdwn',
@@ -234,6 +234,7 @@ async function settingsBlock(userId) {
         text: newItemNotificationDisabled ? 'Enable' : 'Disable',
         emoji: true,
       },
+      style: newItemNotificationDisabled ? 'primary' : undefined,
       value: newItemNotificationDisabled ? 'enable': 'disable',
       action_id: 'disable_new_item_notification',
     }
@@ -259,7 +260,7 @@ async function settingsBlock(userId) {
   return [
     headerBlock('Settings :gear:'),
     divider,
-    newItemNotificationBlock,
+    newItemNotificationSection,
     refreshPageSection,
   ];
 };
