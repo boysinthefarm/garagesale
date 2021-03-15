@@ -2,6 +2,7 @@ const {
   divider,
   headerBlock,
   listCommandBlock,
+  settingsBlock,
 } = require('./block-kits');
 const { getMylistBlocks, getMyListHistoryBlocks } = require('./mylist-handler');
 const { botClientFactory } = require('./slack-installer');
@@ -21,6 +22,7 @@ async function renderHomeTab(auth) {
     headerBlock('Your Sold Items :moneybag:'),
     divider,
     getMyListHistoryBlocks({ userId, teamId }),
+    settingsBlock(userId),
   ]);
 
   // need to remove nesting on some of the elements
