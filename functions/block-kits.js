@@ -234,7 +234,7 @@ async function settingsBlock(userId) {
         text: newItemNotificationDisabled ? 'Enable' : 'Disable',
         emoji: true,
       },
-      value: newItemNotificationDisabled ? 'disabled', 'enabled',
+      value: newItemNotificationDisabled ? 'disabled': 'enabled',
       action_id: 'disable-new-item-notification',
     }
   }
