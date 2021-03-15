@@ -126,6 +126,7 @@ slackInteractions.viewSubmission('sell_modal', async (payload) => {
 
   // message everyone in the team about the new post
   publishJSON(TOPIC.MESSAGE_EVERYONE, {
+    messageType: 'new_item_notification',
     teamId: payload.team.id,
     data: {
       text: 'A new item has been posted for sale!',
