@@ -191,7 +191,7 @@ const sellThisItemBlock = (imageUrl) => {
   return blocks;
 };
 
-function askPermissionBlock(url) {
+async function askPermissionBlock(url) {
   return [{
     block_id: `ask_permission_${Date.now()}`,
     "type": "section",
