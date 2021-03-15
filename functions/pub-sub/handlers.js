@@ -38,7 +38,7 @@ exports.publishHomeTab = pubsub.topic(TOPIC.PUBLISH_HOME_TAB).onPublish(async(me
   // if userId is provided, then just target single user
   // else target all users in the team
   if (userId) {
-    usersToUpdate = [userId];
+    usersToUpdate = [{ id: userId }];
   } else {
     const { members: users } = await client.users.list({ team_id: teamId });
     usersToUpdate = users.filter(user => !user.is_bot);
