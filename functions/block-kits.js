@@ -237,12 +237,30 @@ async function settingsBlock(userId) {
       value: newItemNotificationDisabled ? 'enable': 'disable',
       action_id: 'disable_new_item_notification',
     }
-  }
+  };
+
+  const refreshPageSection = {
+    type: 'section',
+    text: {
+      type: 'mrkdwn',
+      text: 'Refresh this page',
+    },
+    accessory: {
+      type: 'button',
+      text: {
+        type: 'plain_text',
+        text: 'Refresh',
+        emoji: true,
+      },
+      action_id: 'refresh_home_tab',
+    },
+  };
 
   return [
     headerBlock('Settings :gear:'),
     divider,
     newItemNotificationBlock,
+    refreshPageSection,
   ];
 };
 
