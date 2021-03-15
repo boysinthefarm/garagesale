@@ -3,7 +3,7 @@
  */
   
 const commaNumber = require('comma-number');
-const { PostsApi } = require('./db-api');
+const { db, PostsApi } = require('./db-api');
 const { APP_NAME, logger } = require('./utils');
 const { generateInstallUrl, botClientFactory } = require('./slack-installer');
 
@@ -33,7 +33,7 @@ const getMrkdwnBlock = (text, custom = {}) => {
 
 const listPostActionButtons = (doc) => {
   return {
-    "type": "actions",
+    'type': "actions",
     "elements": [
       {
         "type": "button",
@@ -213,6 +213,34 @@ function askPermissionBlock(url) {
   }];
 };
 
+function settingsBlock(userId) {
+  const userDoc = await db.collection('users').doc(userId).get();
+  const { newItemNotificationDisabled = false } = userDoc.data();
+  const newItemNotificationBlock = {
+    type: 'section',
+    text: {
+      type: 'mrkdwn',
+      text: `New item notification *(${newItemNotificationDisabled ? 'disabled' : 'enabled'})*`,
+    },
+    accessory: {
+      type: 'button',
+      text: {
+        type: 'plain_text',
+        text: newItemNotificationDisabled ? 'Enable' : 'Disable',
+        emoji: true,
+      },
+      value: !newItemNotificationDisabled,
+      action_id: 'disable-new-item-notification',
+    }
+  }
+
+  return [
+    headerBlock('Settings :gear:'),
+    divider,
+    newItemNotificationBlock,
+  ];
+};
+
 module.exports = {
   divider,
   headerBlock,
@@ -223,5 +251,6 @@ module.exports = {
   myPostActionButtons,
   sellThisItemBlock,
   askPermissionBlock,
+  settingsBlock,
 };
 
