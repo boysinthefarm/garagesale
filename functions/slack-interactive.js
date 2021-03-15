@@ -154,6 +154,29 @@ slackInteractions.action({ actionId: 'refresh_home_tab' }, async (payload, respo
   publishJSON(TOPIC.PUBLISH_HOME_TAB, { teamId, userId });
 });
 
+slackInteractions.action({ actionId: 'view_image' }, async (payload, respond) => {
+  logger.log('--- view_image ----', payload);
+  const { trigger_id, user: { id: userId, team_id: teamId } } = payload;
+  const { value } = payload.actions[0];
+  const client = await botClientFactory({ teamId });
+  return client.views.open({
+    trigger_id,
+    view: {
+      "type": "modal",
+      "title": {
+        "type": "plain_text",
+        "text": "Image",
+        "emoji": true
+      },
+      "blocks": [{
+        "type": "image",
+        "image_url": value,
+        "alt_text": "image",
+      }],
+    },
+  });
+});
+
 const slackInteractiveApp = express();
 slackInteractiveApp.use('/', slackInteractions.expressMiddleware());
 

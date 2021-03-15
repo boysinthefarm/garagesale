@@ -45,7 +45,17 @@ const listPostActionButtons = (doc) => {
         "style": "primary",
         "value": doc.id,
         "action_id": 'buy_message_seller',
-      }
+      },
+      {
+        "type": "button",
+        "text": {
+          "type": "plain_text",
+          "text": "View Image",
+          "emoji": true
+        },
+        "value": doc.data().image,
+        "action_id": 'view_image',
+      },
     ]
   };
 };
