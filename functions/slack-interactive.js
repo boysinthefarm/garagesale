@@ -148,6 +148,7 @@ slackInteractions.action({ actionId: 'disable_new_item_notification' }, async (p
 
 slackInteractions.action({ actionId: 'refresh_home_tab' }, async (payload, respond) => {
   logger.log('--- refresh_home_tab ----', payload);
+  const { user: { id: userId, team_id: teamId } } = payload;
   // update user's home tab
   publishJSON(TOPIC.PUBLISH_HOME_TAB, { teamId, userId });
 });
