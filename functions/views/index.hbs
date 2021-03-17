@@ -72,7 +72,14 @@
                             
                             <h2 class="heading">Create a marketplace in your workspace </h2>
                             <p class="intro">List, buy and sell items within your trusted network with {{APP_NAME}} in Slack.</p>
-                            <a class="btn btn-primary btn-cta" href={{installUrl}} target="_blank">Add to Slack <i class="fab fa-slack"></i></a>
+                            <a 
+                                class="btn btn-primary btn-cta"
+                                href={{installUrl}}
+                                target="_blank"
+                                onClick="onClickInstallButton()"
+                            >
+                                Add to Slack <i class="fab fa-slack"></i>
+                            </a>
                             
                         </div><!--//item-content-inner-->
                     </div><!--//item-content-->

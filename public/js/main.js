@@ -37,5 +37,8 @@ $(document).ready(function() {
 });
 
 const analytics = firebase.analytics();
-firebase.analytics().logEvent('sky_was_here');
+
+function onClickInstallButton() {
+  firebase.analytics().logEvent('install_button_clicked');
+};
 
