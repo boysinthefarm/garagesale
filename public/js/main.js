@@ -38,7 +38,7 @@ $(document).ready(function() {
 
 const analytics = firebase.analytics();
 
-function onClickInstallButton() {
+function onclickInstallButton() {
   firebase.analytics().logEvent('install_button_clicked');
 };
 
