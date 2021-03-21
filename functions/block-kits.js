@@ -83,10 +83,9 @@ const myPostActionButtons = (doc) => {
       "type": "button",
       "text": {
         "type": "plain_text",
-        "text": "Remove Listing :x:",
+        "text": "Remove Listing",
         "emoji": true,
       },
-      "style": "danger",
       "value": doc.id,
       "action_id": "delete_post",
     });
