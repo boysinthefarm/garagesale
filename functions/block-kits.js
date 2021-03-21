@@ -61,15 +61,16 @@ const listPostActionButtons = (doc) => {
 };
 
 const myPostActionButtons = (doc) => {
+  const { sold, deleted_at } = doc.data() || {};
   const elements = [];
 
-  if (!doc.data().sold) {
+  if (!sold) {
     elements.push({
       "type": "button",
       "text": {
         "type": "plain_text",
         "text": "Mark as Sold :tada:",
-        "emoji": true
+        "emoji": true,
       },
       "style": "danger",
       "value": doc.id,
@@ -77,10 +78,24 @@ const myPostActionButtons = (doc) => {
     });
   }
 
-  return elements.length ? {
+  if (!sold && !deleted_at) {
+    elements.push({
+      "type": "button",
+      "text": {
+        "type": "plain_text",
+        "text": "Remove Listing :x:",
+        "emoji": true,
+      },
+      "style": "danger",
+      "value": doc.id,
+      "action_id": "delete_post",
+    });
+  }
+
+  return {
     type: 'actions',
     elements,
-  } : undefined;
+  };
 };
 
 const getPostBlock = ({
@@ -146,6 +161,7 @@ const listCommandBlock = async ({
   }
 
   posts.forEach(doc => {
+    if (doc.data().deleted_at) return;
     userInfoPromises.push(new Promise(async (resolve) => {
       const { title, price, seller, description, date_posted, sold, image } = doc.data();
       const userInfo = await botClient.users.info({ user: seller });

@@ -16,6 +16,7 @@ const getMylistBlocks = async ({ userId, teamId }) => {
   }
 
   posts.forEach(doc => {
+    if (doc.data().deleted_at) return;
     const buttons = myPostActionButtons(doc);
     blocks = blocks.concat(getPostBlock({
       ...doc.data(),
@@ -53,6 +54,7 @@ const getMyListHistoryBlocks = async ({ userId, teamId }) => {
   }
 
   posts.forEach(doc => {
+    if (doc.data().deleted_at) return;
     const buttons = myPostActionButtons(doc);
     blocks = blocks.concat(getPostBlock({
       ...doc.data(),

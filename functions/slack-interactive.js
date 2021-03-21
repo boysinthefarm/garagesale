@@ -3,7 +3,6 @@ const functions = require('firebase-functions');
 const { createMessageAdapter } = require('@slack/interactive-messages');
 const { logger } = require('./utils');
 const triggerSellModal = require('./trigger-sell-modal');
-const { getMylistBlocks, getMyListHistoryBlocks } = require('./mylist-handler');
 const { db, admin, PostsApi } = require('./db-api');
 const { getPostBlock, getMrkdwnBlock, listCommandBlock } = require('./block-kits');
 const { renderHomeTab } = require('./home-tab');
@@ -30,6 +29,20 @@ slackInteractions.action({ actionId: 'mark_as_sold' }, async (payload, respond) 
 
   const postsApi = new PostsApi({ userId: user.id, teamId: user.team_id });
   await postsApi.doc(postId).update({ sold: true });
+
+  // update everyone's home tab
+  publishJSON(TOPIC.PUBLISH_HOME_TAB, { teamId: user.team_id });
+});
+
+slackInteractions.action({ actionId: 'delete_post' }, async (payload, respond) => {
+  logger.log('--- delete_post ---', payload);
+  const { user } = payload;
+  const postId = payload.actions[0].value;
+
+  const postsApi = new PostsApi({ userId: user.id, teamId: user.team_id });
+  await postsApi.doc(postId).update({
+    deleted_at: admin.firestore.Timestamp.now(),
+  });
 
   // update everyone's home tab
   publishJSON(TOPIC.PUBLISH_HOME_TAB, { teamId: user.team_id });
