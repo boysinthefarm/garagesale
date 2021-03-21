@@ -6,8 +6,8 @@ const {
   getMrkdwnBlock,
   getPostBlock,
   listPostActionButtons,
+  myPostActionButtons,
 } = require('./block-kits');
-const { getMylistBlocks, getMyListHistoryBlocks } = require('./mylist-handler');
 const { botClientFactory } = require('./slack-installer');
 const { PostsApi } = require('./db-api');
 const { logger } = require('./utils');
@@ -54,21 +54,70 @@ const teamPosts = async ({
   return blocks;
 };
 
-async function renderHomeTab({ teamId, userId, botClient }) {
-  if (!botClient) {
-    botClient = await botClientFactory({ teamId, userId });
+const myActivePosts = async ({ userId, teamId }) => {
+  const postsApi = new PostsApi({ userId,  teamId });
+  const posts = await postsApi
+    .where('seller', '==', userId)
+    .where('sold', '==', false)
+    .getOrdered();
+
+  let blocks = [];
+
+  // handle empty state
+  if (posts.empty) {
+    return [getMrkdwnBlock('You have not listed any items! Please refer to Message or About tab for any guidance.')];
   }
 
+  posts.forEach(doc => {
+    if (doc.data().deleted_at) return;
+    const buttons = myPostActionButtons(doc);
+    blocks = blocks.concat(getPostBlock({
+      ...doc.data(),
+      display_name: 'You',
+    }, buttons ? [buttons] : undefined));
+  });
+
+  return blocks;
+};
+
+const mySoldPosts = async ({ userId, teamId }) => {
+  const postsApi = new PostsApi({ userId, teamId });
+  // get items that are sold by the current user (sell history)
+  const posts = await postsApi
+    .where('seller', '==', userId)
+    .where('sold', '==', true)
+    .getOrdered();
+
+  let blocks = [];
+
+  // handle empty state
+  if (posts.empty) {
+    return [getMrkdwnBlock('Once you mark an item as sold, it will appear here!')];
+  }
+
+  posts.forEach(doc => {
+    if (doc.data().deleted_at) return;
+    const buttons = myPostActionButtons(doc);
+    blocks = blocks.concat(getPostBlock({
+      ...doc.data(),
+      display_name: 'You',
+    }, buttons ? [buttons] : undefined));
+  });
+
+  return blocks;
+};
+
+async function renderHomeTab({ teamId, userId, botClient }) {
   let blocks = await Promise.all([
     headerBlock('Welcome :partying_face: \n Check out the items in the marketplace! :kite:'),
     divider,
     teamPosts({ userId, teamId, botClient }),
     headerBlock('Your Garage :teddy_bear:'),
     divider,
-    getMylistBlocks({ userId, teamId }),
+    myActivePosts({ userId, teamId }),
     headerBlock('Your Sold Items :moneybag:'),
     divider,
-    getMyListHistoryBlocks({ userId, teamId }),
+    mySoldPosts({ userId, teamId }),
     settingsBlock(userId),
   ]);
 

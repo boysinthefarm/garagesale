@@ -165,11 +165,15 @@ slackEvents.on('app_home_opened', async (event, body) => {
       "tab":"home"
     }
   */
-  const auth = getAuthFromEventBody(body);
-
   const { tab } = event;
+  const auth = getAuthFromEventBody(body);
+  const botClient = await botClientFactory(auth);
+
   if (tab === 'home') {
-    return await renderHomeTab(auth);
+    return await renderHomeTab({
+      ...auth,
+      botClient,
+    });
   } else if (tab === 'messages') {
     return await respondMessagesTab(event, auth);
   }
