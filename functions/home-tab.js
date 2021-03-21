@@ -9,6 +9,7 @@ const {
 } = require('./block-kits');
 const { getMylistBlocks, getMyListHistoryBlocks } = require('./mylist-handler');
 const { botClientFactory } = require('./slack-installer');
+const { PostsApi } = require('./db-api');
 const { logger } = require('./utils');
 
 const teamPosts = async ({
