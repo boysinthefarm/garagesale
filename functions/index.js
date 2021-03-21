@@ -8,6 +8,7 @@ const { APP_NAME } = require('./utils');
 const {
   messageEveryone,
   publishHomeTab,
+  messageSellInstruction,
 } = require('./pub-sub/handlers');
 
 const slackCommandHandler = require('./slack-command-handler');
@@ -45,4 +46,6 @@ exports.slackRedirect = functions.https.onRequest(slackRedirect);
 exports.messageEveryone = messageEveryone;
 
 exports.publishHomeTab = publishHomeTab;
+
+exports.messageSellInstruction = messageSellInstruction;
 
