@@ -139,59 +139,6 @@ const getPostBlock = ({
   ];
 };
 
-const listCommandBlock = async ({
-  userId,
-  teamId,
-  markAsBuyMessageSent = '', // postId
-}) => {
-  const postsApi = new PostsApi({ userId, teamId });
-
-  const [posts, botClient] = await Promise.all([
-    postsApi.where('sold', '==', false).where('seller', '!=', userId).getOrdered(),
-    botClientFactory({ teamId }),
-  ]);
-
-  let blocks = [];
-  const userInfoPromises = [];
-
-  // handle empty state
-  if (posts.empty) {
-    return [getMrkdwnBlock('There are currently no items available for sale. Please come back later!')];
-  }
-
-  posts.forEach(doc => {
-    if (doc.data().deleted_at) return;
-    userInfoPromises.push(new Promise(async (resolve) => {
-      const { title, price, seller, description, date_posted, sold, image } = doc.data();
-      const userInfo = await botClient.users.info({ user: seller });
-
-      let appendable = [];
-      if (markAsBuyMessageSent === doc.id) {
-        appendable = [getMrkdwnBlock('Message Sent :white_check_mark:')];
-      } else {
-        appendable = [listPostActionButtons(doc)];
-      }
-
-      blocks = blocks.concat(getPostBlock({
-        display_name: userInfo.user.profile.display_name,
-        title,
-        description,
-        price,
-        date_posted,
-        image,
-        sold,
-      }, appendable));
-
-      resolve();
-    }));
-  });
-
-
-  await Promise.all(userInfoPromises);
-
-  return blocks;
-};
-
 const sellThisItemBlock = (imageUrl) => {
   const blocks = [];
   blocks.push({
@@ -293,7 +240,6 @@ async function settingsBlock(userId) {
 module.exports = {
   divider,
   headerBlock,
-  listCommandBlock,
   getMrkdwnBlock,
   getPostBlock,
   listPostActionButtons,

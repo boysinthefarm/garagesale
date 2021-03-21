@@ -62,6 +62,7 @@ exports.publishHomeTab = pubsub.topic(TOPIC.PUBLISH_HOME_TAB).onPublish(async(me
     return renderHomeTab({
       teamId,
       userId: user.id,
+      botClient: client,
     });
   }));
 
