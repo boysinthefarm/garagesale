@@ -92,10 +92,10 @@ const myPostActionButtons = (doc) => {
     });
   }
 
-  return {
+  return elements.length ? {
     type: 'actions',
     elements,
-  };
+  } : undefined;
 };
 
 const getPostBlock = ({
