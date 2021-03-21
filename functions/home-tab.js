@@ -16,7 +16,7 @@ async function renderHomeTab(auth) {
     headerBlock('Welcome :partying_face: \n Check out the items in the marketplace! :kite:'),
     divider,
     listCommandBlock({ userId, teamId }),
-    headerBlock('Your Lemonade Stand :lemon:'),
+    headerBlock('Your Garage :teddy_bear:'),
     divider,
     getMylistBlocks({ userId, teamId }),
     headerBlock('Your Sold Items :moneybag:'),
