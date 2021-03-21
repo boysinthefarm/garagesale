@@ -169,7 +169,6 @@ a:focus {
 }
 
 .header.header-scrolled .logo .logo-icon-wrapper {
-  background: #40babd;
   width: 40px;
   height: 40px;
   -webkit-border-radius: 50%;
@@ -181,12 +180,6 @@ a:focus {
   -webkit-background-clip: padding-box;
   background-clip: padding-box;
   text-align: center;
-}
-
-.header.header-scrolled .logo .logo-icon {
-  width: 20px;
-  height: 20px;
-  margin-right: 0;
 }
 
 .header.header-scrolled .main-nav .nav .nav-link {
