@@ -132,12 +132,6 @@ async function respondMessagesTab(event, auth) {
 
   const userRef = await db.collection('users').doc(userId).get();
   const userToken = userRef.exists && userRef.data().token;
-
-  if (!userToken) {
-    // ask for permission to get user token
-    return await postMessageRequestPermission(auth);
-  }
-
   const botClient = await botClientFactory(auth);
   // query latest messages
   const { messages } = await botClient.conversations.history({ channel, limit: 5 });
