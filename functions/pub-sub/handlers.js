@@ -4,8 +4,27 @@ const { botClientFactory } = require('./../slack-installer');
 const { logger } = require('./../utils');
 const { db } = require('./../db-api');
 const { renderHomeTab } = require('../home-tab');
+const { getMrkdwnBlock } = require('../block-kits');
 
 const pubsub = functions.pubsub;
+
+exports.messageSellInstruction = pubsub.topic(TOPIC.MESSAGE_SELL_INSTRUCTION).onPublish(async(message) => {
+  const { teamId, userId } = message.json;
+  if (!teamId || !userId) {
+    throw new Error('teamId or userId missing');
+  }
+
+  const client = await botClientFactory({ teamId, userId });
+  const text = 'Send a message here with an image attachment to start selling!';
+  return client.chat.postMessage({
+    channel: userId,
+    text,
+    blocks: [getMrkdwnBlock(
+      text,
+      { block_id: `sell_instruction_${Date.now()}` },
+    )],
+  });
+});
 
 exports.messageEveryone = pubsub.topic(TOPIC.MESSAGE_EVERYONE).onPublish(async(message) => {
   const { messageType, teamId, data } = message.json;

@@ -1,16 +1,20 @@
 const { db } = require('./db-api');
+const TOPIC = require('./pub-sub/topic');
+const { publishJSON } = require('./pub-sub/client');
 
 module.exports = {
   storeInstallation: async (installation) => {
     const storePromises = [];
+    const teamId = installation.team && installation.team.id;
+    const userId = installation.user && installation.user.id;
 
     let installationId = '';
     if (installation.isEnterpriseInstall) {
       // storing org installation
       installationId = installation.enterprise.id;
-    } else if (installation.team !== null && installation.team.id !== undefined) {
+    } else if (teamId) {
       // storing single team installation
-      installationId = installation.team.id;
+      installationId = teamId;
     }
 
     if (installationId) {
@@ -21,7 +25,7 @@ module.exports = {
       );
     }
 
-    if (installation.user && installation.user.id) {
+    if (userId) {
       // store user token separately
       storePromises.push(
         db.collection('users')
@@ -32,6 +36,7 @@ module.exports = {
         }, {merge: true})
         .then(() => {
           // let the user know that he can start selling
+          publishJSON(TOPIC.MESSAGE_SELL_INSTRUCTION, { teamId, userId });
         })
       );
     }
