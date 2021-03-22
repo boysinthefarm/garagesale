@@ -186,29 +186,29 @@ function askPermissionBlock(url) {
 };
 
 async function settingsBlock(userId) {
-  let newItemNotificationDisabled = false;
+  let newItemNotificationEnabled = false;
   const userDoc = await db.collection('users').doc(userId).get();
   if (userDoc.exists) {
     const userData = userDoc.data();
-    newItemNotificationDisabled = userData.newItemNotificationDisabled || false;
+    newItemNotificationEnabled = userData.newItemNotificationEnabled || false;
   }
 
   const newItemNotificationSection = {
     type: 'section',
     text: {
       type: 'mrkdwn',
-      text: `New item notification *(${newItemNotificationDisabled ? 'disabled' : 'enabled'})*`,
+      text: 'New item notification',
     },
     accessory: {
       type: 'button',
       text: {
         type: 'plain_text',
-        text: newItemNotificationDisabled ? 'Enable' : 'Disable',
+        text: newItemNotificationEnabled ? 'Disable' : 'Enable',
         emoji: true,
       },
-      style: newItemNotificationDisabled ? 'primary' : undefined,
-      value: newItemNotificationDisabled ? 'enable': 'disable',
-      action_id: 'disable_new_item_notification',
+      style: newItemNotificationEnabled ? undefined : 'primary',
+      value: newItemNotificationEnabled ? 'disable': 'enable',
+      action_id: 'enable_new_item_notification',
     }
   };
 

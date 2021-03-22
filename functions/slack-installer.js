@@ -29,13 +29,11 @@ function generateInstallUrl() {
   return installer.generateInstallUrl({
     // Add the scopes your app needs
     scopes: [
-      'app_mentions:read',
       'chat:write',
-      'commands',
       'files:write',
       'im:history',
-      'users:read',
       'mpim:write',
+      'users:read',
     ],
     userScopes: ['files:read', 'files:write'],
   });

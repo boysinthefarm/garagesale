@@ -147,12 +147,12 @@ slackInteractions.viewSubmission('sell_modal', async (payload) => {
   });
 });
 
-slackInteractions.action({ actionId: 'disable_new_item_notification' }, async (payload, respond) => {
-  logger.log('--- disable_new_item_notification ----', payload);
+slackInteractions.action({ actionId: 'enable_new_item_notification' }, async (payload, respond) => {
+  logger.log('--- enable_new_item_notification ----', payload);
   const { user: { id: userId, team_id: teamId } } = payload;
   const { value } = payload.actions[0];
   await db.collection('users').doc(userId).set({
-    newItemNotificationDisabled: value === 'disable',
+    newItemNotificationEnabled: value === 'enable',
   }, { merge: true });
 
   // update user's home tab

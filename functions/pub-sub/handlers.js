@@ -39,12 +39,15 @@ exports.messageEveryone = pubsub.topic(TOPIC.MESSAGE_EVERYONE).onPublish(async(m
 
   // for new_item_notification, filter out users that opted out
   if (messageType === 'new_item_notification') {
-    // query db for users that have disabled notification
-    const snapshot = await db.collection('users').where('newItemNotificationDisabled', '==', true).get();
-    if (!snapshot.empty) {
-      const excludeUsers = {};
-      snapshot.forEach(doc => excludeUsers[doc.id] = true);
-      users = users.filter(userId => !excludeUsers[userId]);
+    // query db for users that have explicitly enabled notification
+    const snapshot = await db.collection('users').where('newItemNotificationEnabled', '==', true).get();
+    if (snapshot.empty) {
+      // nobody has enabled notification
+      users = [];
+    } else {
+      const enabledUsers = {};
+      snapshot.forEach(doc => enabledUsers[doc.id] = true);
+      users = users.filter(userId => enabledUsers[userId]);
     }
   }
 
